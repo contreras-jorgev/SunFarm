@@ -35,7 +35,7 @@ bld/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
-CustomerAppSite\wwwroot\lib\asna-expo
+CustomerAppSite/wwwroot/lib/asna-expo
 
 # Visual Studio 2017 auto generated files
 Generated\ Files/
