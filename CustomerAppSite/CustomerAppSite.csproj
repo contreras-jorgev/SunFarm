@@ -16,12 +16,13 @@
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.113" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ASNA.QSys.Expo" Version="2.2.0" />
+    <PackageReference Include="ASNA.QSys.Expo" Version="2.2.4" />
     <PackageReference Include="ASNA.QSys.MonaServer" Version="2.2.0" />
     <PackageReference Include="ASNA.QSys.Runtime" Version="2.2.3" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MessageFiles\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CustomerAppLogic_CS\CustomerAppLogic.csproj" />
