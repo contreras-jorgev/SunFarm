@@ -46,9 +46,9 @@
                         int row = 8 + rrn;
                         <DdsSubfileRecord RecordNumber="rrn" For="SFLC.SFL1">
                             <DdsDecField Col="4" For="SFLC.SFL1[rrn].SFSEL" VirtualRowCol="@row,4" EditCode="Z" ValuesText="'0','2','3','5','7','9','10','11'" tabIndex=2 />
-                            <DdsDecField Col="7+1" For="SFLC.SFL1[rrn].SFCUSTNO" Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" EditCode="Z" Comment="CUSTOMER NUMBER" />
-                            <DdsCharField Col="14+1" For="SFLC.SFL1[rrn].SFNAME1" Upper=true Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" />
-                            <DdsCharField Col="55+1" For="SFLC.SFL1[rrn].SFCSZ" Upper=true Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" Comment="CITY-STATE-ZIP" />
+                            <DdsDecField Col="7+1" For="SFLC.SFL1[rrn].SFCUSTNO" Color="Green : !61 , DarkBlue : 61" EditCode="Z" Comment="CUSTOMER NUMBER" />
+                            <DdsCharField Col="14+1" For="SFLC.SFL1[rrn].SFNAME1" Upper=true Color="Green : !61 , DarkBlue : 61" />
+                            <DdsCharField Col="55+1" For="SFLC.SFL1[rrn].SFCSZ" Upper=true Color="Green : !61 , DarkBlue : 61" Comment="CITY-STATE-ZIP" />
                         </DdsSubfileRecord>
                     }
                 </div>

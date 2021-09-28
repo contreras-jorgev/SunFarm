@@ -105,13 +105,13 @@
                         int row = 12 + rrn;
                         <DdsSubfileRecord RecordNumber="rrn" For="SFLC.SFL1">
                             <DdsDecField Col="2" For="SFLC.SFL1[rrn].SFSEL" VisibleCondition="!( 60 )" VirtualRowCol="@row,2" EditCode="Z" ValuesText="'0','2','3','6'" tabIndex=1 />
-                            <DdsDecField Col="7+1" For="SFLC.SFL1[rrn].SFORDNUM" Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" EditCode="Z" />
-                            <DdsDateField Col="19+1" For="SFLC.SFL1[rrn].SFORDDATE"  Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" Comment="ORDER DATE" />
-                            <DdsDateField Col="30+1" For="SFLC.SFL1[rrn].SFSHPDATE"  Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" Comment="PRICE" />
-                            <DdsDecDateField Col="41+1" For="SFLC.SFL1[rrn].SFDELDATE" DateFormat="ISO" DateSeparator="-" SuppressLeadingZeroes=true Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" />
-                            <DdsDecField Col="52+1" For="SFLC.SFL1[rrn].SFORDAMT" Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" EditCode="A" />
-                            <DdsCharField Col="71+1" For="SFLC.SFL1[rrn].SFFILESTAT" Upper=true Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" />
-                            <DdsDecField Col="76+1" For="SFLC.SFL1[rrn].SFSHPVIA" Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" EditCode="Z" />
+                            <DdsDecField Col="7+1" For="SFLC.SFL1[rrn].SFORDNUM" Color="Green : !61 , DarkBlue : 61"  EditCode="Z" />
+                            <DdsDateField Col="19+1" For="SFLC.SFL1[rrn].SFORDDATE"  Color="Green : !61 , DarkBlue : 61"  Comment="ORDER DATE" />
+                            <DdsDateField Col="30+1" For="SFLC.SFL1[rrn].SFSHPDATE"  Color="Green : !61 , DarkBlue : 61"  Comment="PRICE" />
+                            <DdsDecDateField Col="41+1" For="SFLC.SFL1[rrn].SFDELDATE" DateFormat="ISO" DateSeparator="-" SuppressLeadingZeroes=true Color="Green : !61 , DarkBlue : 61"  />
+                            <DdsDecField Col="52+1" For="SFLC.SFL1[rrn].SFORDAMT" Color="Green : !61 , DarkBlue : 61"  EditCode="A" />
+                            <DdsCharField Col="71+1" For="SFLC.SFL1[rrn].SFFILESTAT" Upper=true Color="Green : !61 , DarkBlue : 61"  />
+                            <DdsDecField Col="76+1" For="SFLC.SFL1[rrn].SFSHPVIA" Color="Green : !61 , DarkBlue : 61"  EditCode="Z" />
                         </DdsSubfileRecord>
                     }
                 </div>
