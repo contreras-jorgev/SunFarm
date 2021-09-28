@@ -1,2 +1,28 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿#logo-banner {
+    height: auto;
+    background-color: green;
+}
+
+#logo {
+    padding-left: 1em;
+}
+
+#logo-text {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: -41px;
+}
+
+#logo-title {
+    color: orange;
+    font-size: xx-large;
+    font-family: system-ui;
+    font-weight: bolder;
+}
+
+#logo-subtitle {
+    text-align: center;
+    color: lightgreen;
+    font-size: medium;
+    opacity: 0.5;
+}
