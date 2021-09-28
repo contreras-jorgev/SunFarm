@@ -17,7 +17,7 @@
             @{
                 int SFLC_SubfilePage = 14;
             }
-            <DdsSubfileControl For="SFLC" KeyNames="ENTER 'Enter'; F9 'Spooled Files'; PageUp; PageDown;" SubfilePage="@SFLC_SubfilePage" CueCurrentRecord=true ClickSetsCurrentRecord=true>
+            <DdsSubfileControl For="SFLC" KeyNames="ENTER 'Submit'; F3 'Exit'; PageUp '◀ Page'; PageDown 'Next ▶'; F9 'Spool Files'" SubfilePage="@SFLC_SubfilePage" CueCurrentRecord=true ClickSetsCurrentRecord=true>
                 <div Row="1">
                     <DdsConstant Col="2" Text=@System.Environment.UserName />
                     <DdsConstant Col="31+1" Text="M5 Customer Inquiry" Color="DarkBlue" />
