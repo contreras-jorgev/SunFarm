@@ -18,9 +18,7 @@
                 int SFLC_SubfilePage = 14;
             }
             <DdsSubfileControl For="SFLC" KeyNames="ENTER 'Submit'; F3 'Exit'; PageUp '◀ Page'; PageDown 'Next ▶'; F9 'Spool Files'" SubfilePage="@SFLC_SubfilePage" CueCurrentRecord=true ClickSetsCurrentRecord=true>
-                <div Row="1">
-                    <DdsConstant Col="31+1" Text="M5 Customer Inquiry" Color="DarkBlue" />
-                </div>
+                <div id="page-title">Customer Inquiry</div>
                 <div Row="2">
                     <DdsConstant Col="52+1" Text="Position to name:" />
                     <DdsCharField Col="70+1" For="SFLC.SETNAME" VirtualRowCol="2,70" tabIndex=1 />
