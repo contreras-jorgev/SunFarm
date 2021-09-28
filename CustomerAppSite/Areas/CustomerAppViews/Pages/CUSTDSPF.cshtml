@@ -17,27 +17,27 @@
             @{
                 int SFLC_SubfilePage = 14;
             }
-            <DdsSubfileControl For="SFLC" KeyNames="ENTER 'Submit'; F3 'Exit'; PageUp '◀ Page'; PageDown 'Next ▶'; F9 'Spool Files'" SubfilePage="@SFLC_SubfilePage" CueCurrentRecord=true ClickSetsCurrentRecord=true>
+            <DdsSubfileControl StretchConstantText=false For="SFLC" KeyNames="ENTER 'Submit'; F3 'Exit'; PageUp '◀ Page'; PageDown 'Next ▶'; F9 'Spool Files'" SubfilePage="@SFLC_SubfilePage" CueCurrentRecord=true ClickSetsCurrentRecord=true>
                 <div id="page-title">Customer Inquiry</div>
                 <div Row="2">
-                    <DdsConstant Col="52+1" Text="Position to name:" />
-                    <DdsCharField Col="70+1" For="SFLC.SETNAME" VirtualRowCol="2,70" tabIndex=1 />
+                    <DdsConstant Col="1+55+1" Text="Position to name:" />
+                    <DdsCharField Col="10+1+55+1" ColSpan="15" For="SFLC.SETNAME" VirtualRowCol="2,70" tabIndex=1 />
                 </div>
                 <div Row="3">
-                    <DdsConstant Col="3" Text="Sel" Color="DarkBlue" Underline="*True" />
-                    <DdsConstant Col="7+1" Text="Custno" Color="DarkBlue" Underline="*True" />
-                    <DdsConstant Col="14+1" Text="Customer Name" Color="DarkBlue" Underline="*True" />
-                    <DdsConstant Col="55+1" Text="City / State / Zip" Color="DarkBlue" Underline="*True" />
+                    <DdsConstant Col="2" ColSpan="15" Text="Selection" Color="DarkBlue" Underline="*True" />
+                    <DdsConstant Col="10+7+1" Text="Custno" Color="DarkBlue" Underline="*True" />
+                    <DdsConstant Col="8+10+7+1" ColSpan="30" Text="Customer Name" Color="DarkBlue" Underline="*True" />
+                    <DdsConstant Col="1+55+1" Text="City / State / Zip" Color="DarkBlue" Underline="*True" />
                 </div>
                 <div Row="4" RowSpan="@SFLC_SubfilePage">
                     @for (int rrn=0; rrn < Model.SFLC.SFL1.Count; rrn++)
                     {
                         int row = 8 + rrn;
                         <DdsSubfileRecord RecordNumber="rrn" For="SFLC.SFL1">
-                            <DdsDecField Col="4" For="SFLC.SFL1[rrn].SFSEL" VirtualRowCol="@row,4" EditCode="Z" ValuesText="' ','Update','Display sales','Delivery Addresses','Create sales record','Print sales (oline)','Print sales (batch)','Orders'" tabIndex=2 />
-                            <DdsDecField Col="12+7+1" For="SFLC.SFL1[rrn].SFCUSTNO" Color="Green : !61 , DarkBlue : 61" EditCode="Z" Comment="CUSTOMER NUMBER" />
-                            <DdsCharField Col="12+14+1" For="SFLC.SFL1[rrn].SFNAME1" Upper=true Color="Green : !61 , DarkBlue : 61" />
-                            <DdsCharField Col="12+55+1" For="SFLC.SFL1[rrn].SFCSZ" Upper=true Color="Green : !61 , DarkBlue : 61" Comment="CITY-STATE-ZIP" />
+                            <DdsDecField Col="2" For="SFLC.SFL1[rrn].SFSEL" VirtualRowCol="@row,4" EditCode="Z" ValuesText="' ','Update','Display sales','Delivery Addresses','Create sales record','Print sales (oline)','Print sales (batch)','Orders'" tabIndex=2 />
+                            <DdsDecField Col="10+7+1" For="SFLC.SFL1[rrn].SFCUSTNO" Color="Green : !61 , DarkBlue : 61" EditCode="Z" Comment="CUSTOMER NUMBER" />
+                            <DdsCharField Col="11+14+1" ColSpan="30" For="SFLC.SFL1[rrn].SFNAME1" Upper=true Color="Green : !61 , DarkBlue : 61" />
+                            <DdsCharField Col="1+55+1" For="SFLC.SFL1[rrn].SFCSZ" Upper=true Color="Green : !61 , DarkBlue : 61" Comment="CITY-STATE-ZIP" />
                         </DdsSubfileRecord>
                     }
                 </div>
