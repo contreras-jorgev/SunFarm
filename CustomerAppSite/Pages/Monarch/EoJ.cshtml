@@ -1,0 +1,25 @@
+﻿@page
+@model CustomerAppSite.Pages.Asna.EoJModel
+@{
+    ViewData["Title"] = "EoJ";
+}
+
+    <div style="padding:3em">
+        <h1>End of Job </h1>
+        <br />
+        <br />
+        <div>
+            Thank you for using Display Pages application ASNA Monarch<sup>&reg;</sup>
+        </div>
+        <br />
+        <br />
+        <br />
+        <div>
+            For production work you can either replace the contents of this display with your own text and images<br />
+            or you can redirect the user back to a
+            <a href='@Url.Page("/Regular/TheMenu", new { area = "" })'>
+                Main Menu
+            </a>
+            .
+        </div>
+    </div>

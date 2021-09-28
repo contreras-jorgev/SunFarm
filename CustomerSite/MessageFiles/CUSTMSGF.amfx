@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Message File ERCAP/CUSTMSGF ASNA Monarch(R) version 10.0.48.0 at 9/28/2021 -->
+<LegacyMsgFileContents version="1.0">
+<messages>
+<MSG MSGID="CST0001" SEVERITY="0" DATACOUNT="1" TEXT="Customer &amp;1 has been added" SECLVL="" TYPE1="*CHAR" LEN1="9" DEC1="0"                                                                         />
+<MSG MSGID="CST0002" SEVERITY="0" DATACOUNT="1" TEXT="Customer &amp;1 has been updated" SECLVL="Cause ... : You updated the customer.&amp;P Recovery:  Continue working." TYPE1="*CHAR" LEN1="9" DEC1="0"                                                                                        />
+<MSG MSGID="CST0003" SEVERITY="0" DATACOUNT="1" TEXT="Customer &amp;1 has been deleted" SECLVL="" TYPE1="*CHAR" LEN1="9" DEC1="0"                                                                       />
+<MSG MSGID="CST0004" SEVERITY="20" DATACOUNT="0" TEXT="Prompting is available for State and Status only." SECLVL=""                                                                                     />
+<MSG MSGID="CST0005" SEVERITY="0" DATACOUNT="1" TEXT="&amp;1 customer(s) were submitted to batch for processing." SECLVL="" TYPE1="*CHAR" LEN1="3" DEC1="0"                                             />
+<MSG MSGID="CST0006" SEVERITY="0" DATACOUNT="1" TEXT="The sales report has been printed." SECLVL="" TYPE1="*DEC" LEN1="7" DEC1="0"                                                                      />
+<MSG MSGID="CST1000" SEVERITY="20" DATACOUNT="3" TEXT="One Thousand is &amp;1 and One Hundred is &amp;2 which is spelled &amp;3" SECLVL="And here &amp;1 is the same &amp;3" TYPE1="*CHAR" LEN1="10" DEC1="0" TYPE2="*DEC" LEN2="9" DEC2="2" TYPE3="*CHAR" LEN3="50" DEC3="0"                    />
+<MSG MSGID="CST1001" SEVERITY="20" DATACOUNT="1" TEXT="The &amp;1 cannot be blank." SECLVL="" TYPE1="*CHAR" LEN1="25" DEC1="0"                                                                          />
+<MSG MSGID="CST1002" SEVERITY="20" DATACOUNT="1" TEXT="The &amp;1 cannot be blank.  Press F4 to prompt." SECLVL="" TYPE1="*CHAR" LEN1="20" DEC1="0"                                                     />
+<MSG MSGID="CST1015" SEVERITY="20" DATACOUNT="3" TEXT="Library &amp;1 is not accessible." SECLVL="The system returned an error &amp;2 when trying to execute &amp;3 on library &amp;1." TYPE1="*CHAR" LEN1="10" DEC1="0" TYPE2="*CHAR" LEN2="7" DEC2="0" TYPE3="*CHAR" LEN3="20" DEC3="0"        />
+</messages>
+</LegacyMsgFileContents>

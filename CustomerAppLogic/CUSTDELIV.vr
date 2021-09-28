@@ -1,0 +1,116 @@
+﻿// ASNA Monarch(R) version 10.0.48.0 at 9/28/2021
+// Migrated source location: library ERCAP, file QRPGSRC, member CUSTDELIV
+
+Using SunFarm.CustomerApp_Job
+
+Using System
+Using ASNA.QSys.Runtime
+Using ASNA.QSys.Runtime.JobSupport
+
+BegClass CUSTDELIV Extends(Program) Access(*Public) + 
+   Attributes(ActivationGroup('*DFTACTGRP')) + 
+   UsesCycle(*Yes)
+
+    //********************************************************************
+    // JB   8/31/2004   Created.
+
+    //********************************************************************
+    DclDiskFile CUSTOMERL1  Type(*Input) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/CUSTOMERL1") ImpOpen(*No) RnmFmt( RCUSTOMER )
+    DclDiskFile CAMASTER  Type(*Input) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/CAMASTER") ImpOpen(*No) RnmFmt( RCAMASTER )
+    DclWorkStnFile CUSTDELIV DspFile("~\Areas\CustomerAppViews\Pages\CUSTDELIV") Subfile( sfl1,sflrrn )
+    //********************************************************************
+    // Customer DS
+    DclDs CUSTDS ExtDesc(*Yes) DbDesc(MyJob.MyDatabase) FileDesc("*LIBL/CUSTOMER")
+    
+    //********************************************************************
+ 
+// Fields defined in main C-Specs declared now as Global fields (Monarch generated)
+    DclFld pNumber           Type( *Packed  )    Len( 9,0 )
+    DclFld savrrn            Type( *Packed  )    Len( 4,0 )
+    DclFld sflrrn            Type( *Packed  )    Len( 4,0 )
+ 
+/region Constructor and Dispose 
+    BegConstructor Access(*Public)
+        Open CAMASTER DB(CurrentJob.Database)
+        Open CUSTOMERL1 DB(CurrentJob.Database)
+    EndConstructor
+ 
+    BegSr Dispose  Access( *Public ) Modifier(*Overrides)
+        DclSrParm disposing Type(*Boolean)
+        If( disposing )
+            Close *All
+        EndIf
+        *Base.Dispose(Disposing)
+    EndSr
+ 
+ 
+/endregion
+    BegProc *Entry Access(*Public)
+        DclSrParm pNumber           By(*Reference)
+ 
+ 
+        DoWhile ( *Not *In12)
+            *In90 = '0'
+            Write keys
+            ExFmt sflc 
+    // exit
+            If( *In12)
+                *InLR = '1'
+                Leave
+            EndIf
+            *In30 = '0'
+            ZAdd F2(sflrrn) Result(savrrn)
+            ReadC sfl1 Eof(*In40)
+            DoWhile ( *Not *In40)
+                If( sflsel = '1' )
+                    Chain sfl1 Key(sflrrn)
+                    ExSr Something
+                    Move *Blanks SFLSEL
+                    Update sfl1
+                EndIf
+                ReadC sfl1 Eof(*In40)
+            EndDo
+            ZAdd F2(savrrn) Result(sflrrn)
+        EndDo
+    //****************************************
+
+    //****************************************
+    EndProc
+    BegSr Something
+    EndSr
+    //**********************
+    //  Load Sfl Subroutine
+    //**********************
+    BegSr LoadSfl
+        ReadE From(CAMASTER) Key(pNumber) Eof(*In99)
+        DoWhile ( *Not *In99)
+            ZAdd F2(CACUSTNO) Result(SFLCUST#)
+            MoveL CAName SFLCUST
+            SFLCITY = %TrimR(CACITY) + ', '+ CASTATE
+            MoveL CAZIP SFLZIP
+            ADD F2(1) Result(sflrrn)
+            Write sfl1
+            ReadE From(CAMASTER) Key(pNumber) Eof(*In99)
+        EndDo
+    // end of file
+        If( sflrrn = 0 )
+            ADD F2(1) Result(sflrrn)
+            ZAdd F2(0) Result(CMCustNo)
+            SFLCUST = 'No Address Records Found'
+            Move *Blanks SFLCITY
+            Move *Blanks SFLZIP
+            Write sfl1
+        EndIf
+    EndSr
+    //*********************
+    // Init Subroutine
+    //*********************
+    BegSr PROCESS_STAR_INZSR
+        ZAdd F2(0) Result(sflrrn)
+        *In90 = '1'
+        Write sflc
+        SetLL CAMASTER Key(pNumber)
+        ExSr LoadSfl
+    EndSr
+ 
+EndClass

@@ -1,0 +1,212 @@
+﻿// ASNA Monarch(R) version 10.0.48.0 at 9/28/2021
+// Migrated source location: library ERCAP, file QRPGSRC, member CUSTPRMPT
+
+Using SunFarm.CustomerApp_Job
+
+Using System
+Using ASNA.QSys.Runtime
+Using ASNA.QSys.Runtime.JobSupport
+
+BegClass CUSTPRMPT Extends(Program) Access(*Public) + 
+   Attributes(ActivationGroup('*DFTACTGRP')) + 
+   UsesCycle(*Yes)
+
+    //********************************************************************
+    // JB   8/27/2004   Created.
+    // JB   5/23/2005   Added a window title field.
+    //                  Changed the subfile page size from 10 to 8.
+    //                  Fixed truncated description field.
+    //                  Added a variable for the loop size in LoadSFL.
+    // JB   5/25/2005   Changed cursor row to cursor field name.
+    // JB   3/05/2008   Added code for displaying 'ship via' codes.
+    //********************************************************************
+    DclWorkStnFile CUSTPRMP DspFile("~\Areas\CustomerAppViews\Pages\CUSTPRMP") Subfile( SFl1,SflRRN )
+    DclDiskFile SHIPPING  Type(*Input) Org(*Arrival) DB(MyJob.MyDatabase) File("*LIBL/SHIPPING") ImpOpen(*No) RnmFmt( SHIP )
+    //********************************************************************
+    //       Open Feedback Area
+    //       Input/Output Feedback Information
+    //                                                                         * 241-242 not used
+    //       Display Specific Feedback Information
+    //                                                                         *  cursor location
+    //********************************************************************
+    DclDs 
+        DclDsFld WorkDS            Type( *Char    )    Len( 32  )
+        DclDsFld wkAbbrev2         Type( *Char    )    Len( 1   ) Overlay(WorkDS, 1)
+        DclDsFld wkAbbrev          Type( *Char    )    Len( 2   ) Overlay(WorkDS, 1)
+        DclDsFld wkDesc            Type( *Char    )    Len( 30  ) Overlay(WorkDS, 3)
+        DclDsFld wkDesc2           Type( *Char    )    Len( 31  ) Overlay(WorkDS, 2)
+    
+    
+    DclFld Counter           Type( *Packed  )    Len( 5,0 )
+    DclFld WinTitle          Type( *Char    )    Len( 20  )
+    DclFld X                 Type( *Packed  )    Len( 5,0 ) Inz( 0 )
+    DclArray States            Type( *Char    ) Len( 32  ) Dim( 58 )
+    DclArray Status            Type( *Char    ) Len( 12  ) Dim( 5 )
+    //********************************************************************
+ 
+// Fields defined in main C-Specs declared now as Global fields (Monarch generated)
+    DclFld pCsrFld           Type( *Char    )    Len( 10  )
+    DclFld pResult           Type( *Char    )    Len( 10  )
+ 
+/region Constructor and Dispose 
+    BegConstructor Access(*Public)
+        Load_CompileTime_Table_States()
+        Load_CompileTime_Table_Status()
+ 
+    EndConstructor
+ 
+    BegSr Dispose  Access( *Public ) Modifier(*Overrides)
+        DclSrParm disposing Type(*Boolean)
+        If( disposing )
+            Close *All
+        EndIf
+        *Base.Dispose(Disposing)
+    EndSr
+ 
+ 
+/endregion
+    BegProc *Entry Access(*Public)
+        DclSrParm pCsrFld           By(*Reference)
+        DclSrParm pResult           By(*Reference)
+ 
+ 
+    //********************************************************************
+        MoveL *Blanks pResult
+        ExSr LoadSfl
+        *In90 = '0'
+        ZAdd F2(1) Result(SflRRN)
+        Write MyWindow
+        ExFmt sflc 
+        If( *In12)
+            *InLR = '1'
+            Return 
+        EndIf
+    //********************************************************************
+        DoUntil ( *In40)
+            ReadC sfl1 Eof(*In40)
+
+            If( *Not *In40)
+                If( sflsel = 1 )
+                    Chain sfl1 Key(SflRRN)
+                    MoveL SFLVALUE pResult
+                    *InLR = '1'
+                    Return 
+                EndIf
+            EndIf
+        EndDo
+    ///SPACE 3
+    //********************************************************************
+    //    LOAD THE SUBFILE WITH REQUIRED INFORMATION
+    //********************************************************************
+    EndProc
+    BegSr LoadSFL
+        Select
+            When ( pCsrFld = 'SFSTATE' )
+                Counter = %Elem(States)
+                WinTitle = 'Select a State'
+                Do FromVal(1) ToVal(Counter) Index(X)
+                    MoveL States[x -1] WorkDS
+                    MoveL wkDesc SFLDESC
+                    MoveL wkAbbrev SFLVALUE
+                    ZAdd F2(X) Result(SflRRN)
+                    Write SFL1
+                EndDo
+            When ( pCsrFld = 'SFSTATUS' )
+                Counter = %Elem(Status)
+                WINTITLE = 'Select a Status Code'
+                Do FromVal(1) ToVal(Counter) Index(X)
+                    MoveL Status[x -1] WorkDS
+                    MoveL wkDesc2 SFLDESC
+                    MoveL wkAbbrev2 SFLVALUE
+                    ZAdd F2(X) Result(SflRRN)
+                    Write SFL1
+                EndDo
+            When ( pCsrFld = 'SHIPVIA' )
+                ZAdd F2(0) Result(SflRRN)
+                WinTitle = 'Select a Carrier'
+                Open SHIPPING DB(CurrentJob.Database)
+                Read SHIPPING Eof(*In66)
+                DoWhile ( *Not *In66)
+                    SFLVALUE = %Trim(%EditC(CARRIERCOD:'Z'))
+                    SFLDESC = CARRIERDES
+                    ADD F2(1) Result(SflRRN)
+                    Write SFL1
+                    Read SHIPPING Eof(*In66)
+                EndDo
+                Close SHIPPING
+        EndSl
+    EndSr
+    //********************************************************************
+/region ** Compile-time Data
+    BegSr Load_CompileTime_Table_States
+        States[0] = "ALAlabama                       "
+        States[1] = "AKAlaska                        "
+        States[2] = "ASAmerican Somoa                "
+        States[3] = "AZArizona                       "
+        States[4] = "ARArkansas                      "
+        States[5] = "CACalifornia                    "
+        States[6] = "COColorado                      "
+        States[7] = "CTConnecticut                   "
+        States[8] = "DEDelaware                      "
+        States[9] = "DCDistrict of Columbia          "
+        States[10] = "FMFederated State of Micronesia "
+        States[11] = "FLFlorida                       "
+        States[12] = "GAGeorgia                       "
+        States[13] = "GUGuam                          "
+        States[14] = "HIHawaii                        "
+        States[15] = "IDIdaho                         "
+        States[16] = "ILIllinois                      "
+        States[17] = "INIndiana                       "
+        States[18] = "IAIowa                          "
+        States[19] = "KSKansas                        "
+        States[20] = "KYKentucky                      "
+        States[21] = "LALouisana                      "
+        States[22] = "MEMaine                         "
+        States[23] = "MHMarshall Islands              "
+        States[24] = "MDMaryland                      "
+        States[25] = "MAMassachussets                 "
+        States[26] = "MIMichigan                      "
+        States[27] = "MNMinnesota                     "
+        States[28] = "MSMississippi                   "
+        States[29] = "MOMissouri                      "
+        States[30] = "MTMontana                       "
+        States[31] = "NENebraska                      "
+        States[32] = "NVNevada                        "
+        States[33] = "NHNew Hampshire                 "
+        States[34] = "NJNew Jersey                    "
+        States[35] = "NMNew Mexico                    "
+        States[36] = "NYNew York                      "
+        States[37] = "NCNorth Carolina                "
+        States[38] = "NDNorth Dakota                  "
+        States[39] = "OHOhio                          "
+        States[40] = "OKOklahoma                      "
+        States[41] = "OROregon                        "
+        States[42] = "PWPalau                         "
+        States[43] = "PAPennsylvania                  "
+        States[44] = "PRPuerto Rico                   "
+        States[45] = "RIRhode Island                  "
+        States[46] = "SCSouth Carolina                "
+        States[47] = "SDSouth Dakota                  "
+        States[48] = "TNTennessee                     "
+        States[49] = "TXTexas                         "
+        States[50] = "UTUtah                          "
+        States[51] = "VTVermont                       "
+        States[52] = "VIVirgin Islands                "
+        States[53] = "VAVirgina                       "
+        States[54] = "WAWashington                    "
+        States[55] = "WVWest Virginia                 "
+        States[56] = "WIWisconsin                     "
+        States[57] = "WYWyoming                       "
+    EndSr
+ 
+    BegSr Load_CompileTime_Table_Status
+        Status[0] = "AActive     "
+        Status[1] = "CClosed     "
+        Status[2] = "OOver limit "
+        Status[3] = "RRefer      "
+        Status[4] = "SSuspended  "
+    EndSr
+ 
+/endregion
+ 
+EndClass

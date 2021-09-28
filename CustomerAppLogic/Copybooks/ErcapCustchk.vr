@@ -1,0 +1,14 @@
+﻿// ASNA Monarch(R) version 10.0.48.0 at 9/28/2021
+// Migrated source location: library ERCAP, file QRPGSRC, member CUSTCHK
+
+    ///Space 3
+    //********************************************************************
+    //   CHECK THE CUSTOMER NUMBER
+    //********************************************************************
+    BegSr CustChk
+        If( LockRec = 'N' )
+            Chain L1RecFmt Key(CMCUSTNO) NotFnd(*In80) Access(*NoLock)
+        Else
+            Chain L1RecFmt Key(CMCUSTNO) NotFnd(*In80)
+        EndIf
+    EndSr

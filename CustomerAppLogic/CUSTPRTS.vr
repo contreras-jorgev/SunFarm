@@ -1,0 +1,111 @@
+﻿// ASNA Monarch(R) version 10.0.48.0 at 9/28/2021
+// Migrated source location: library ERCAP, file QRPGSRC, member CUSTPRTS
+
+Using SunFarm.CustomerApp_Job
+
+Using System
+Using ASNA.QSys.Runtime
+Using ASNA.QSys.Runtime.JobSupport
+
+BegClass CUSTPRTS Extends(Program) Access(*Public) + 
+   Attributes(ActivationGroup('*DFTACTGRP')) + 
+   UsesCycle(*Yes)
+
+    DclDiskFile CSMASTERL1  Type(*Input) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/CSMASTERL1") ImpOpen(*No) RnmFmt( RCSMASTL1 )
+    DclDiskFile CUSTOMERL1  Type(*Input) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/CUSTOMERL1") ImpOpen(*No) RnmFmt( RCUSTOMER )
+    DclPrintFile QPRINT DB(MyJob.MyPrinterDB) File("PRINTFILES\CUSTPRTS") UsesPageFlds(*Yes) ImpOpen(*No) OverflowInd(*InOF) 
+    DclConst QPRINT_PrintLineHeight 50 Access(*Internal) // Notes: Units are LOMETRIC (one hundredth of a centimeter). The constant used came from the Global Directive defaults.
+    //********************************************************************
+    //   U1 Print sales
+    //   U2 Print credits
+    //********************************************************************
+    DclDs pNumberAlf
+        DclDsFld pNumber           Type( *Zoned   )    Len( 9,0 )
+    
+    
+    DclFld wCount            Type( *Packed  )    Len( 7,0 ) Inz( 0 )
+    DclFld wPrevYr           Type( *Packed  )    Len( 4,0 ) Inz( 9999 )
+    DclFld wPrtYr            Type( *Packed  )    Len( 4,0 ) Inz( 9999 )
+    DclFld wUnderline        Type( *Char    )    Len( 120 ) Inz( *All"-" )
+    DclFld X                 Type( *Integer2 )     Inz( 0 )
+    DclDs CUSTSL ExtDesc(*Yes) DbDesc(MyJob.MyDatabase) FileDesc("*LIBL/CSMASTER")
+        DclOverlayGroup SlsArray Type( *Packed  )    Len( 11,2 ) Dim( 12 ) StartField( CSSALES01 )
+    
+/region Program Status Data Structure
+    DclDs 
+        DclDsFld sUserId           Type( *Char    )    Len( 10  )
+    
+/endregion
+    //**********************************************************************
+    //**********************************************************************
+/region Constructor and Dispose 
+    BegConstructor Access(*Public)
+        Open CSMASTERL1 DB(CurrentJob.Database)
+        Open CUSTOMERL1 DB(CurrentJob.Database)
+        QPRINT.Printer = "Microsoft Print to PDF"
+        QPRINT.ManuscriptPath = Spooler.GetNewFilePath(QPRINT.DclPrintFileName)
+        Open QPRINT DB(CurrentJob.PrinterDB)
+    EndConstructor
+ 
+    BegSr Dispose  Access( *Public ) Modifier(*Overrides)
+        DclSrParm disposing Type(*Boolean)
+        If( disposing )
+            Close *All
+        EndIf
+        *Base.Dispose(Disposing)
+    EndSr
+ 
+ 
+/endregion
+    BegProc *Entry Access(*Public)
+        DclSrParm pNumberAlf        By(*Reference)
+ 
+ 
+    //----------------------------------------------------------------------
+        Chain CUSTOMERL1 Key(pNumber) NotFnd(*In80)
+        If( *In80 )
+            MoveL '????????' CMNAME
+        EndIf
+        Write PrtHeading
+        SetLL CSMASTERL1 Key(pNumber)
+        ReadE From(CSMASTERL1) Key(pNumber) Eof(*InLR)
+    //----------------------------------------------------------------------
+        DoWhile ( *InLR = *Off )
+            If( CSYEAR = wPrevYr )
+                ZAdd F2(0) Result(wPrtYr)
+            Else
+                ZAdd F2(CSYEAR) Result(wPrtYr)
+                ZAdd F2(CSYEAR) Result(wPrevYr)
+            EndIf
+            ExSr ChkTheInfo
+            ReadE From(CSMASTERL1) Key(pNumber) Eof(*InLR)
+        EndDo
+    //----------------------------------------------------------------------
+        Write PrtCount
+    //**********************************************************************
+    //**********************************************************************
+    EndProc
+    BegSr ChkTheInfo
+        Do FromVal(1) ToVal(12) Index(X)
+            If( CurrentJob.GetSwitch(1) = *Off   /*  Don't print sales */ +
+                *And ( SlsArray[X -1] > 0 ) )
+                ZAdd F2(0) Result(SlsArray[X -1])
+            EndIf
+            If( CurrentJob.GetSwitch(2) = *Off   /*  Don't print credits */ +
+                *And ( SlsArray[X -1] < 0 ) )
+                ZAdd F2(0) Result(SlsArray[X -1])
+            EndIf
+        EndDo
+    // IS THERE ANYTHING TO PRINT? -----------------------------------------
+        Do FromVal(1) ToVal(12) Index(X)
+            If( SlsArray[X -1] <> 0 )
+                Write PrtDetail
+                ADD F2(1) Result(wCount)
+                Leave
+            EndIf
+        EndDo
+    EndSr
+    //**********************************************************************
+    //**********************************************************************
+ 
+EndClass

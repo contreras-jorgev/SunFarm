@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Copyright>Copyright Â©  2021</Copyright>
+    <Product>CustomerAppLogic</Product>
+    <Company></Company>
+    <Description></Description>
+    <Title>CustomerAppLogic</Title>
+    <AssemblyName>SunFarm.CustomerApp</AssemblyName>
+    <RootNamespace>YourCompany.YourApplication</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ASNA.QSys.Runtime" Version="2.2.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="CUSTCALC.Io.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CUSTCALC.Io.xfu</DependentUpon>
+    </Compile>
+    <Compile Update="CUSTDELIV.Io.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CUSTDELIV.Io.xfu</DependentUpon>
+    </Compile>
+    <Compile Update="CUSTINQ.Io.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CUSTINQ.Io.xfu</DependentUpon>
+    </Compile>
+    <Compile Update="CUSTPRMPT.Io.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CUSTPRMPT.Io.xfu</DependentUpon>
+    </Compile>
+    <Compile Update="CUSTPRTS.Io.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CUSTPRTS.Io.xfu</DependentUpon>
+    </Compile>
+    <Compile Update="ITEMINQ.Io.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ITEMINQ.Io.xfu</DependentUpon>
+    </Compile>
+    <Compile Update="ORDDTLINQ.Io.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ORDDTLINQ.Io.xfu</DependentUpon>
+    </Compile>
+    <Compile Update="ORDHINQ.Io.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ORDHINQ.Io.xfu</DependentUpon>
+    </Compile>
+    <Compile Update="ORDPRINT.Io.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ORDPRINT.Io.xfu</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="CUSTCALC.Io.xfu">
+      <DependentUpon>CUSTCALC.cs</DependentUpon>
+      <Generator>AdgFileUsageGenerator</Generator>
+      <LastGenOutput>CUSTCALC.Io.cs</LastGenOutput>
+    </None>
+    <None Update="CUSTDELIV.Io.xfu">
+      <DependentUpon>CUSTDELIV.cs</DependentUpon>
+      <Generator>AdgFileUsageGenerator</Generator>
+      <LastGenOutput>CUSTDELIV.Io.cs</LastGenOutput>
+    </None>
+    <None Update="CUSTINQ.Io.xfu">
+      <DependentUpon>CUSTINQ.cs</DependentUpon>
+      <Generator>AdgFileUsageGenerator</Generator>
+      <LastGenOutput>CUSTINQ.Io.cs</LastGenOutput>
+    </None>
+    <None Update="CUSTPRMPT.Io.xfu">
+      <DependentUpon>CUSTPRMPT.cs</DependentUpon>
+      <Generator>AdgFileUsageGenerator</Generator>
+      <LastGenOutput>CUSTPRMPT.Io.cs</LastGenOutput>
+    </None>
+    <None Update="CUSTPRTS.Io.xfu">
+      <DependentUpon>CUSTPRTS.cs</DependentUpon>
+      <Generator>AdgFileUsageGenerator</Generator>
+      <LastGenOutput>CUSTPRTS.Io.cs</LastGenOutput>
+    </None>
+    <None Update="ITEMINQ.Io.xfu">
+      <DependentUpon>ITEMINQ.cs</DependentUpon>
+      <Generator>AdgFileUsageGenerator</Generator>
+      <LastGenOutput>ITEMINQ.Io.cs</LastGenOutput>
+    </None>
+    <None Update="ORDDTLINQ.Io.xfu">
+      <DependentUpon>ORDDTLINQ.cs</DependentUpon>
+      <Generator>AdgFileUsageGenerator</Generator>
+      <LastGenOutput>ORDDTLINQ.Io.cs</LastGenOutput>
+    </None>
+    <None Update="ORDHINQ.Io.xfu">
+      <DependentUpon>ORDHINQ.cs</DependentUpon>
+      <Generator>AdgFileUsageGenerator</Generator>
+      <LastGenOutput>ORDHINQ.Io.cs</LastGenOutput>
+    </None>
+    <None Update="ORDPRINT.Io.xfu">
+      <DependentUpon>ORDPRINT.cs</DependentUpon>
+      <Generator>AdgFileUsageGenerator</Generator>
+      <LastGenOutput>ORDPRINT.Io.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+</Project>

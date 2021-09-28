@@ -1,0 +1,140 @@
+﻿// ASNA Monarch(R) version 10.0.48.0 at 9/28/2021
+// Migrated source location: library ERCAP, file QRPGSRC, member ORDPRINT
+
+Using SunFarm.CustomerApp_Job
+
+Using System
+Using ASNA.QSys.Runtime
+Using ASNA.QSys.Runtime.JobSupport
+
+BegClass ORDPRINT Extends(Program) Access(*Public) + 
+   Attributes(ActivationGroup('*DFTACTGRP')) + 
+   UsesCycle(*Yes)
+
+    DclDiskFile CUSTOMERL1  Type(*Input) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/CUSTOMERL1") ImpOpen(*No) RnmFmt( RCUSTOMER )
+    DclDiskFile ITEMMASTL1  Type(*Input) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/ITEMMASTL1") ImpOpen(*No) RnmFmt( ITEM )
+    DclDiskFile ORDERHDRL2  Type(*Input) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/ORDERHDRL2") ImpOpen(*No) RnmFmt( RORDRHDR )
+    DclDiskFile ORDERLINL2  Type(*Input) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/ORDERLINL2") ImpOpen(*No) RnmFmt( RORDLINE )
+    DclDiskFile SHIPPING  Type(*Input) Org(*Arrival) DB(MyJob.MyDatabase) File("*LIBL/SHIPPING") ImpOpen(*No) RnmFmt( SHIP )
+    DclPrintFile QPRINT DB(MyJob.MyPrinterDB) File("PRINTFILES\ORDPRINT") UsesPageFlds(*Yes) ImpOpen(*No) OverflowInd(*InOF) 
+    DclConst QPRINT_PrintLineHeight 50 Access(*Internal) // Notes: Units are LOMETRIC (one hundredth of a centimeter). The constant used came from the Global Directive defaults.
+// TODO :  Some O-Spec records for ORDPRINT fetch for Overflow but no fields are conditioned with OF indicator.
+    //********************************************************************
+    DclArray wShipCode         Type( *Zoned   ) Len( 3  ,0 ) Dim( 20 ) Inz( 0 )
+    DclArray wShipDesc         Type( *Char    ) Len( 30  ) Dim( 20 ) Inz( "Unknown" )
+    DclFld wCountLne         Type( *Packed  )    Len( 5,0 ) Inz( 0 )
+    DclFld wCUSTNO           Type( *Char    )    Len( 50  )
+    // DclFld wDateUSA1         Type( *Date    )     TimFmt( *USA) 
+    // DclFld wDateUSA2         Type( *Date    )     TimFmt( *USA) 
+    DclFld wITEMNUM          Type( *Packed  )    Len( 5,0 )
+    DclFld wLINNUM           Type( *Char    )    Len( 4   )
+    DclFld wORDAMOUNT        Type( *Char    )    Len( 13  )
+    DclFld wORDNBR           Type( *Char    )    Len( 9   )
+    DclFld wPRTADDR          Type( *Char    )    Len( 40  )
+    DclFld wEXTAMT           Type( *Packed  )    Len( 9,4 )
+    DclFld wTempAmt          Type( *Packed  )    Len( 9,2 )
+/region Program Status Data Structure
+    DclDs 
+        DclDsFld wUserId           Type( *Char    )    Len( 10  )
+    
+/endregion
+    //********************************************************************
+ 
+// Fields defined in main C-Specs declared now as Global fields (Monarch generated)
+    DclFld pCUSTNO           Type( *Packed  )    Len( 9,0 )
+    DclFld pORDNBR           Type( *Packed  )    Len( 9,0 )
+ 
+    // KLIST(s) relocated by Monarch
+    DclKList KeyHeadL2
+        DclKFld pCUSTNO 
+        DclKFld pORDNBR 
+    
+    DclKList KeyLineL2
+        DclKFld ORDNUMBER 
+        DclKFld ORDLINNUM 
+    
+ 
+/region Constructor and Dispose 
+    BegConstructor Access(*Public)
+        Open CUSTOMERL1 DB(CurrentJob.Database)
+        Open ITEMMASTL1 DB(CurrentJob.Database)
+        Open ORDERHDRL2 DB(CurrentJob.Database)
+        Open ORDERLINL2 DB(CurrentJob.Database)
+        Open SHIPPING DB(CurrentJob.Database)
+        QPRINT.Printer = "Microsoft Print to PDF"
+        QPRINT.ManuscriptPath = Spooler.GetNewFilePath(QPRINT.DclPrintFileName)
+        Open QPRINT DB(CurrentJob.PrinterDB)
+    EndConstructor
+ 
+    BegSr Dispose  Access( *Public ) Modifier(*Overrides)
+        DclSrParm disposing Type(*Boolean)
+        If( disposing )
+            Close *All
+        EndIf
+        *Base.Dispose(Disposing)
+    EndSr
+ 
+ 
+/endregion
+    BegProc *Entry Access(*Public)
+        DclSrParm pCUSTNO           By(*Reference)
+        DclSrParm pORDNBR           By(*Reference)
+ 
+ 
+    //----------------------------------------------------------------------
+        // KLIST "KeyHeadL2" moved by Monarch to global scope.
+        // KLIST "KeyLineL2" moved by Monarch to global scope.
+    //----------------------------------------------------------------------
+        Chain CUSTOMERL1 Key(pCUSTNO) NotFnd(*In66)
+        wCUSTNO = %Trim(%EditC(pCUSTNO:'Z')) + ' ' + CMNAME
+        wORDNBR = %Trim(%EditC(pORDNBR:'Z'))
+        Write PrtNmeLine
+        If( CMADDR1 <> *Blanks )
+            wPRTADDR = CMADDR1
+            Write PrtAdrLine
+        EndIf
+        If( CMADDR2 <> *Blanks )
+            wPRTADDR = CMADDR2
+            Write PrtAdrLine
+        EndIf
+        If( CMCITY <> *Blanks )
+            wPRTADDR = %Trim(CMCITY) + ', ' + CMSTATE + ' ' + CMPOSTCODE
+            Write PrtAdrLine
+        EndIf
+        wPRTADDR = *Blanks
+        Write PrtAdrLine
+    //----------------------------------------------------------------------
+        Chain ORDERHDRL2 Key(KeyHeadL2) NotFnd(*In66)
+        wDateUSA1 = ORDDATE
+        wDateUSA2 = ORDSHPDATE
+        wTempAmt = ORDAMOUNT //// Two decimals
+        wORDAMOUNT = '$' + %Trim(%EditC(wTempAmt:'3'))
+        Chain SHIPPING Key(ORDSHPVIA) NotFnd(*In66)
+        If( *In66 )
+            CARRIERDES = 'UNKNOWN'
+        EndIf
+        Write PrtHdrLine
+    //----------------------------------------------------------------------
+        ORDNUMBER = pORDNBR
+        ORDLINNUM = 0
+        SetLL ORDERLINL2 Key(KeyLineL2)
+        ReadE From(ORDERLINL2) Key(ORDNUMBER) Eof(*InLR)
+        DoWhile ( *InLR = *Off ) //EOF?
+            Chain ITEMMASTL1 Key(ORDITEMNUM) NotFnd(*In66)
+            wLINNUM = %Trim(%EditC(ORDLINNUM:'Z'))
+            wITEMNUM = ORDITEMNUM
+            wEXTAMT = ORDLQTY * ITEMPRICE
+            ExSr Write_QPRINT_PrtDtlLine
+            ADD F2(1) Result(wCountLne)
+            ReadE From(ORDERLINL2) Key(ORDNUMBER) Eof(*InLR)
+        EndDo
+        Write PrtTotLine
+    EndProc
+    //***************************************************************
+/region Except to Names with conditional indicators, Fetch overflow or Blank-After fields (Monarch generated)
+    BegSr Write_QPRINT_PrtDtlLine
+        Write PrtDtlLineF
+    EndSr
+/endregion
+ 
+EndClass

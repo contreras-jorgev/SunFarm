@@ -1,0 +1,551 @@
+﻿// ASNA Monarch(R) version 10.0.48.0 at 9/28/2021
+// Migrated source location: library ERCAP, file QRPGSRC, member CUSTINQ
+
+Using SunFarm.CustomerApp_Job
+
+Using System
+Using ASNA.QSys.Runtime
+Using ASNA.QSys.Runtime.JobSupport
+
+BegClass CUSTINQ Extends(Program) Access(*Public) + 
+   Attributes(ActivationGroup('*DFTACTGRP')) + 
+   UsesCycle(*Yes)
+
+    //********************************************************************
+    // JB   8/27/2004   Added F4 (Prompt) options.
+    // JB   8/30/2004   Added 'submit job' option.
+    // JB   9/01/2004   Fixed record locking problem.
+    // JB   5/19/2005   Added colouring to the name/addr subfile.
+    //                  Added cursor postioning to the detail format.
+    //                  Added option to print sales online or in batch.
+    //                  Changed the prompt display to a window.
+    // JB   5/23/2005   Added /COPY for reading CUSTOMERL1.
+    //                  Added customer name to the sales summary format.
+    //                  Added renaming of CUSTOMERL1 record format.
+    // JB   5/24/2005   Simplified the LoadSfl subroutine.
+    // JB   5/31/2005   Added PageDown/RollUp processing.
+    // JB   6/01/2005   Renamed CMMASTER* files to CUSTOMER*.
+    // JB  14/02/2006   Fixed bug in page up on the customer subfile -
+    //                  a customer record was skipped every time.
+    //********************************************************************
+    // INDICATORS:
+    //   03     F3 pressed
+    //   09     F9 pressed
+    //   40-44  Cursor positioning
+    //   50     PageUp pressed
+    //   51     PageDown pressed
+    //   66     EOF reading on the subfile
+    //   76     BOF reading CUSTOMERL2
+    //   77     EOF reading CUSTMOMER2
+    //   88     LR seton in a called program
+    //   99     General error indicator
+    //********************************************************************
+    DclWorkStnFile CUSTDSPF DspFile("~\Areas\CustomerAppViews\Pages\CUSTDSPF") Subfile( sfl1,sflrrn )
+    //                                    HANDLER('ASNAWINGS')
+    DclDiskFile CUSTOMERL2  Type(*Input) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/CUSTOMERL2") ImpOpen(*No) RnmFmt( L2RECFMT )
+    DclDiskFile CUSTOMERL1  Type(*Update) AddRec(*Yes) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/CUSTOMERL1") ImpOpen(*No) RnmFmt( L1RECFMT )
+    //********************************************************************
+    DclDs 
+        DclDsFld #pNbrs            Type( *Zoned   )    Len( 3,0 )
+        DclDsFld #pNbrsAlf         Type( *Char    )    Len( 3   ) Overlay(#pNbrs, 1)
+    
+    
+    DclArray pNumbers          Type( *Zoned   ) Len( 9  ,0 ) Dim( 20 )
+    DclArray pTypes            Type( *Char    ) Len( 1   ) Dim( 20 )
+    DclFld MID               Type( *Char    )    Len( 7   )
+    DclFld MTX               Type( *Char    )    Len( 30  )
+    DclFld Sales             Type( *Packed  )    Len( 13,2 )
+    DclFld Returns           Type( *Packed  )    Len( 13,2 )
+    DclFld LockRec           Type( *Char    )    Len( 1   )
+    DclFld CmCust#           Type( *Packed  )    Len( 9,0 )
+    DclFld SalesCh           Type( *Char    )    Len( 13  )
+    DclFld ReturnsCh         Type( *Char    )    Len( 13  )
+    DclFld CmCust#CH         Type( *Char    )    Len( 9   )
+    DclFld X                 Type( *Packed  )    Len( 5,0 ) Inz( 0 )
+    DclDs 
+        DclDsFld SVCUSTNO          Type( *Zoned   )    Len( 9,0 )
+        DclDsFld SVCUSTNOa         Type( *Char    )    Len( 9   ) Overlay(SVCUSTNO, 1)
+    
+    
+    // Customer DS
+    DclDs CUSTDS ExtDesc(*Yes) DbDesc(MyJob.MyDatabase) FileDesc("*LIBL/CUSTOMER")
+    
+    //       Open Feedback Area
+    //       Input/Output Feedback Information
+    //                                                                         * 241-242 not used
+    //       Display Specific Feedback Information
+    //                                                                         *  cursor location
+    //********************************************************************
+ 
+// Fields defined in main C-Specs declared now as Global fields (Monarch generated)
+    DclFld AddUpd            Type( *Char    )    Len( 1   )
+    DclFld Name40            Type( *Char    )    Len( 40  )
+    DclFld ORDCUST           Type( *Packed  )    Len( 9,0 )
+    DclFld pNumber           Type( *Packed  )    Len( 9,0 )
+    DclFld pResult           Type( *Char    )    Len( 10  )
+    DclFld savrrn            Type( *Packed  )    Len( 4,0 )
+    DclFld sflrrn            Type( *Packed  )    Len( 4,0 )
+    DclFld TEMPNO            Type( *Packed  )    Len( 9,0 )
+ 
+    // PLIST(s) relocated by Monarch
+    DclPList #PLMSG
+        DclParm MID
+        DclParm MTX
+    
+ 
+    // KLIST(s) relocated by Monarch
+    DclKList KeyMastL2
+        DclKFld CMNAME 
+        DclKFld CMCUSTNO 
+    
+ 
+/region Constructor and Dispose 
+    BegConstructor Access(*Public)
+ 
+        // Initialization of Data Structure fields (Monarch generated)
+        ExSr Reset_#pNbrs
+ 
+        Open CUSTOMERL1 DB(CurrentJob.Database)
+        Open CUSTOMERL2 DB(CurrentJob.Database)
+    EndConstructor
+ 
+    BegSr Dispose  Access( *Public ) Modifier(*Overrides)
+        DclSrParm disposing Type(*Boolean)
+        If( disposing )
+            Close *All
+        EndIf
+        *Base.Dispose(Disposing)
+    EndSr
+ 
+ 
+/endregion
+    BegProc *Entry Access(*Public)
+ 
+ 
+        // KLIST "KeyMastL2" moved by Monarch to global scope.
+    //********************************************************************
+        DoUntil ( *In03)
+            *In90 = '0'
+            Write MSGSFC
+            Write keys
+            ExFmt sflc 
+            ExSr ClearMsgs
+    //--------------------------------------------------------------------
+            Select
+    // Exit
+                When ( *In03)
+                    *InLR = '1'
+                    Leave
+    // PageUp-RollDown
+                When ( *In50)
+                    SetLL L2RecFmt Key(CMNAME)
+                    ExSr LoadSfl
+    // Work with spooled files
+                When ( *In09)
+                    CallD Pgm( 'YourCompany.YourApplication.WWSPLF'  )
+                When ( SetName <> *Blanks )
+                    MoveL SetName Name40 Fill(*Pad)
+                    SetLL L2RecFmt Key(Name40)
+                    ExSr Loadsfl
+    // PageDown-RollUp
+                When ( *In51)
+                    ExSr ReadBack
+                    ExSr LoadSfl
+                When ( SetName <> *Blanks )
+                    MoveL SetName Name40 Fill(*Pad)
+                    SetLL L2RecFmt Key(Name40)
+                    ExSr Loadsfl
+                Other
+                    SetOff IndList( *In30, *In66 )
+                    ZAdd F2(sflrrn) Result(savrrn)
+                    ZAdd F2(0) Result(pNumbers)
+                    ZAdd F2(0) Result(#pNbrs)
+                    DoUntil ( *In66)
+                        ReadC sfl1 Eof(*In66)
+                        If( *Not *In66)
+                            Select
+                                When ( SFSEL = 10 ) // Print in batch.
+                                    Chain sfl1 Key(sflrrn)
+                                    #pNbrs = #pNbrs + 1
+                                    pNumbers[ (#pNbrs) - 1 ] = SFCUSTNO
+                                    MoveL 'P' pTypes[#pNbrs -1]
+                                    ExSr ClearSel
+                                When ( SFSEL = 9 ) // Print online.
+                                    ZAdd F2(SFCUSTNO) Result(SVCUSTNO)
+                                    CallD Pgm( 'YourCompany.YourApplication.CUSTPRTS'  )  LR(*In88)
+                                        DclParm SVCUSTNOa
+                                    MID = 'CST0006'
+                                    MTX = ' '
+                                    CallD Pgm( 'YourCompany.YourApplication.MSGLOD'  ) ParmList(#PLMSG)
+                                    ExSr ClearSel
+                                When ( SFSEL = 7 ) // Create sales rec.
+                                    Chain sfl1 Key(sflrrn)
+                                    #pNbrs = #pNbrs + 1
+                                    pNumbers[ (#pNbrs) - 1 ] = SFCUSTNO
+                                    MoveL 'C' pTypes[#pNbrs -1]
+                                    ExSr ClearSel
+                                When ( SFSEL = 5 ) // Display delivery
+                                    Chain sfl1 Key(sflrrn) //  addresses.
+                                    CallD Pgm( 'YourCompany.YourApplication.CUSTDELIV'  )  LR(*In88)
+                                        DclParm CpyFrom(SFCUSTNO) Name(pNumber)
+                                    ExSr ClearSel
+
+                                When ( SFSEL = 3 ) // Display sales and
+                                    Chain sfl1 Key(sflrrn) //  returns totals.
+                                    ExSr SalesInfo
+
+                                When ( SFSEL = 11 ) // Maintainance.
+                                    Chain sfl1 Key(sflrrn)
+                                    ZAdd F2(SFCUSTNO) Result(ORDCUST)
+                                    CallD Pgm( 'YourCompany.YourApplication.ORDHINQ'  )
+                                        DclParm ORDCUST
+                                    ExSr ClearSel
+
+                                When ( SFSEL = 2 ) // Maintainance.
+                                    Chain sfl1 Key(sflrrn)
+                                    ExSr RcdUpdate
+                            EndSl
+                        EndIf
+                    EndDo
+                    If( #pNbrs > 0 ) //Are there any jobs
+                        CallD Pgm( 'YourCompany.YourApplication.CUSTSBMJOB'  )  LR(*In88) // to submit to batch?
+                            DclParm pNumbers
+                            DclParm pTypes
+                        MID = 'CST0005'
+                        MTX = #pNbrsAlf
+                        CallD Pgm( 'YourCompany.YourApplication.MSGLOD'  ) ParmList(#PLMSG)
+                    EndIf
+                    ZAdd F2(savrrn) Result(sflrrn)
+            EndSl
+        EndDo
+    //*********************************************************************
+    // UPDATE THE CUSTOMER RECORD
+    //*********************************************************************
+    EndProc
+    BegSr RcdUpdate
+        ExSr ClearSel
+        Move 'U' AddUpd
+        ZAdd F2(SFCUSTNO) Result(CMCUSTNO)
+        MoveL 'N' LockRec
+        ExSr CustChk
+        MoveL CMNAME SFOLDNAME
+        MoveL CMNAME SFNAME
+        MoveL CMADDR1 SFADDR1
+        MoveL CMADDR2 SFADDR2
+        MoveL CMCITY SFCITY
+        MoveL CMSTATE SFSTATE
+        MoveL CMPOSTCODE SFPOSTCODE
+        MoveL CMFAX SFFAX
+        MoveL CMPHONE SFPHONE
+        MoveL CMACTIVE SFSTATUS
+        MoveL CMCONTACT SFCONTACT
+        MoveL CMCONEMAL SFCONEMAL
+        MoveL CMYN01 SFYN01
+        SetOn *In40 // Place the cursor on
+        SetOff IndList( *In41, *In42, *In43 ) //  the name field.
+        SetOff IndList( *In44, *In99 )
+    //-------------------------------------------------------
+        DoUntil ( *In12)
+            Write MSGSFC
+            ExFmt CUSTREC 
+            SetOff IndList( *In40, *In41, *In42 )
+            SetOff IndList( *In43, *In44 )
+            ExSr ClearMsgs
+            *In30 = '0'
+
+            Select
+                When ( *In03)
+                    Leave
+
+                When ( *In12)
+                    Leave
+    // Prompt
+                When ( *In04)
+                    If( CSRFLD = 'SFSTATE'  +
+                        *Or ( CSRFLD = 'SFSTATUS' ) )
+                        CallD Pgm( 'YourCompany.YourApplication.CUSTPRMPT'  )  LR(*In88)
+                            DclParm CSRFLD
+                            DclParm pResult
+                        If( pResult <> *Blanks )
+                            If( CSRFLD = 'SFSTATE' )
+                                MoveL pResult SFSTATE
+                            Else
+                                MoveL pResult SFSTATUS
+                            EndIf
+                        EndIf
+                    Else
+                        MID = 'CST0004'
+                        MTX = ' '
+                        CallD Pgm( 'YourCompany.YourApplication.MSGLOD'  ) ParmList(#PLMSG)
+                        SetOff *In04
+                    EndIf
+                When ( *In06)
+                    ZAdd F2(CMCUSTNO) Result(SVCUSTNO)
+                    SetGT L1RecFmt Key(*Hival)
+                    ReadP L1RecFmt Access(*NoLock)
+                    ADD F1(CMCUSTNO) F2(100) Result(TEMPNO)
+                    Clear CustDs
+                    ZAdd F2(TEMPNO) Result(CMCUSTNO)
+                    Move 'A' AddUpd
+                    ZAdd F2(TEMPNO) Result(SFCUSTNO)
+                    MoveL *Blanks SFNAME
+                    MoveL *Blanks SFADDR1
+                    MoveL *Blanks SFADDR2
+                    MoveL *Blanks SFCITY
+                    MoveL *Blanks SFSTATE
+                    MoveL *Blanks SFPOSTCODE
+                    MoveL *Blanks SFFAX
+                    MoveL *Blanks SFPHONE
+                    MoveL *Blanks SFSTATUS
+                    MoveL *Blanks SFCONTACT
+                    MoveL *Blanks SFCONEMAL
+                    MoveL *Blanks SFYN01
+                    *In30 = '1'
+    // Delete - leave sales hanging?
+                When ( *In11)
+                    MoveL 'Y' LockRec
+                    ExSr CustChk
+                    If( *Not(*In80) )
+                        Delete From(L1RecFmt)
+                    EndIf
+                    Chain SFL1 Key(Sflrrn)
+                    Move *Blanks SFCSZ
+                    SFNAME1 = '*** DELETED ***'
+    // Set the color
+                    *In60 = '1'
+                    Update SFL1
+                    *In60 = '0'
+    // Delete msg
+                    MID = 'CST0003'
+                    Move CMCUSTNO MTX
+                    CallD Pgm( 'YourCompany.YourApplication.MSGLOD'  ) ParmList(#PLMSG)
+                    Leave
+    // Add/update on the Enter key
+                Other
+                    If( AddUpd = 'A' )
+                        ExSr EditFlds
+                        If( *In99) // Any errors?
+                            Iterate
+                        EndIf
+                        ExSr UpdDbFlds
+                        Write L1RecFmt
+    // Added message
+                        MID = 'CST0001'
+                        Move CMCUSTNO MTX
+                        CallD Pgm( 'YourCompany.YourApplication.MSGLOD'  ) ParmList(#PLMSG)
+                        Leave
+    // Update the database
+                    Else
+                        ExSr EditFlds
+                        If( *In99) // Any errors?
+                            Iterate
+                        EndIf
+                        MoveL 'Y' LockRec
+                        ExSr CustChk //Reread the record.
+                        ExSr UpdDbFlds
+                        Update L1RecFmt
+                        Chain SFL1 Key(sflrrn)
+                        MoveL CMName SFNAME1
+                        ExSr Fix_CSZ
+                        Update SFL1
+    // Updated message
+                        MID = 'CST0002'
+                        MoveL CMCUSTNO MTX
+                        CallD Pgm( 'YourCompany.YourApplication.MSGLOD'  ) ParmList(#PLMSG)
+                    EndIf
+    // Re-open for the next update
+                    MoveL 'N' LockRec
+                    ExSr CustChk
+            EndSl
+        EndDo
+    EndSr
+    //*********************************************************************
+    //  EDIT THE SCREEN FIELDS
+    //*********************************************************************
+    BegSr EditFlds
+        SetOff IndList( *In40, *In41, *In42 ) //Clear all error inds
+        SetOff IndList( *In43, *In44, *In99 )
+        Select
+            When ( SFNAME = *Blanks )
+                SetOn IndList( *In40, *In99 )
+                MID = 'CST1001' // Blank field.
+                MTX = 'customer name'
+            When ( SFADDR1 = *Blanks )
+                SetOn IndList( *In41, *In99 )
+                MID = 'CST1001' // Blank field.
+                MTX = 'first address line'
+            When ( SFCITY = *Blanks )
+                SetOn IndList( *In42, *In99 )
+                MID = 'CST1001' // Blank field.
+                MTX = 'city'
+            When ( SFSTATE = *Blanks )
+                SetOn IndList( *In43, *In99 )
+                MID = 'CST1002' // Blank field.
+                MTX = 'state'
+            When ( SFSTATUS = *Blanks )
+                SetOn IndList( *In44, *In99 )
+                MID = 'CST1002' //Blank field.
+                MTX = 'status'
+        EndSl
+        If( *In99)
+            CallD Pgm( 'YourCompany.YourApplication.MSGLOD'  ) ParmList(#PLMSG)
+        EndIf
+    EndSr
+    //*********************************************************************
+    //  UPDATE THE DATABASE FIELDS
+    //*********************************************************************
+    BegSr UpdDbFlds
+        ZAdd F2(SFCUSTNO) Result(CMCUSTNO)
+        CMNAME = %Trim(SFNAME)
+        CMADDR1 = %Trim(SFADDR1)
+        CMADDR2 = %Trim(SFADDR2)
+        CMCITY = %Trim(SFCITY)
+        MoveL SFSTATE CMSTATE
+        MoveL SFPOSTCODE CMPOSTCODE
+        MoveL SFFAX CMFAX
+        MoveL SFPHONE CMPHONE
+        MoveL SFSTATUS CMACTIVE
+        CMCONTACT = %Trim(SFCONTACT)
+        CMCONEMAL = %Trim(SFCONEMAL)
+        CMYN01 = %Trim(SFYN01)
+    EndSr
+    //*********************************************************************
+    // Retrieve Calculated Sales Info
+    //*********************************************************************
+    BegSr SalesInfo
+        ExSr ClearSel
+        ZAdd F2(SFCUSTNO) Result(CMCUSTNO)
+        MoveL 'N' LockRec
+        ExSr CustChk
+        ZAdd F2(CMCUSTNO) Result(CMCust#)
+        ZAdd F2(0) Result(Sales)
+        ZAdd F2(0) Result(Returns)
+        Move CMCustNo CMCust#CH
+        Move *Zeros SalesCh
+        Move *Zeros ReturnsCh
+        CallD Pgm( 'YourCompany.YourApplication.CUSTCALC'  )  LR(*In88)
+            DclParm CMCust#Ch
+            DclParm SalesCh
+            DclParm ReturnsCh
+
+        MoveL CMNAME SFNAME
+        Move SalesCh SFSales
+        Move ReturnsCh SFReturns
+        DoUntil ( *In03 +
+            *Or ( *In12) )
+            ExFmt SalesRec 
+        EndDo
+        SetOff *In03 // Reset the exit ind.
+    EndSr
+    //*********************************************************************
+    //  Load Sfl Subroutine
+    //*********************************************************************
+    BegSr LoadSfl
+        SetOff *In61 //Start with green.
+        *In90 = '1' //Clear the subfile.
+        Write SflC
+        SetOff IndList( *In76, *In90 ) //Display records.
+        ZAdd F2(0) Result(SflRRN)
+        Read L2RecFmt Eof(*In77)
+    //----------------------------------------------------------
+        DoWhile ( *Not *In77  /* EOF or full s/f. */ +
+            *And ( SflRRN < 14 ) )
+            ZAdd F2(CMCUSTNO) Result(SFCUSTNO)
+            MoveL CMNAME SFNAME1
+            ExSr Fix_CSZ
+            If( *In61) //Save the color of
+                MoveL 'W' SFCOLOR // the row.
+            Else
+                MoveL 'G' SFCOLOR
+            EndIf
+            ADD F2(1) Result(sflrrn)
+            Write sfl1
+            *In61 = (*Not *In61) //Reverse the colour.
+            Read L2RecFmt Eof(*In77)
+        EndDo
+    // Any records found?
+        If( SflRRN = 0 )
+            ZAdd F2(1) Result(sflrrn)
+            Move *Blanks SFCUSTNO
+            ZAdd F2(0) Result(CMCustNo)
+            MoveL 'END OF FILE' SFNAME1
+            Move *Blanks SFCSZ
+            Write sfl1
+        EndIf
+    EndSr
+    //*********************************************************************
+    //  Read Backwards for a PageDown
+    //*********************************************************************
+    BegSr ReadBack
+        SetOff IndList( *In76, *In77 )
+        ZAdd F2(0) Result(X)
+        Chain sfl1 Key(1) //Get the top name and
+        MoveL SFNAME1 CMNAME // number.
+        ZAdd F2(SFCUSTNO) Result(CMCUSTNO)
+        Chain L2RecFmt Key(KeyMastL2)
+        ReadP L2RecFmt Bof(*In76)
+        DoWhile ( *Not *In76  /* EOF or full s/f. */ +
+            *And ( X < 14 ) )
+            ADD F2(1) Result(X)
+            ReadP L2RecFmt Bof(*In76)
+        EndDo
+        If( *In76) //Any records found?
+            SetLL L2RecFmt Key(*LoVal)
+        EndIf
+    EndSr
+    //*********************************************************************
+    // Fix CSZ Subroutine
+    //*********************************************************************
+    BegSr Fix_CSZ
+        SFCSZ = %TrimR(CMCITY) + ', ' + CMSTATE +' ' + CMPOSTCODE
+    EndSr
+    //*********************************************************************
+    // CLEAR THE SELECTION NUMBER
+    //*********************************************************************
+    BegSr ClearSel
+        ZAdd F2(0) Result(SFSEL)
+        *In61 = (SFCOLOR = 'W')
+        Update sfl1
+    EndSr
+    //*********************************************************************
+    // CLEAR THE MESSAGE QUEUE
+    //*********************************************************************
+    BegSr ClearMsgs
+        CallD Pgm( 'YourCompany.YourApplication.MSGCLR'  )
+        MID = *Blank
+    EndSr
+    //*********************************************************************
+    //     * Init Subroutine
+    //*********************************************************************
+    BegSr PROCESS_STAR_INZSR
+        SetLL L2RecFmt Key(*Loval)
+        ExSr LoadSfl
+        *In75 = *On
+        MID = *Blank
+        @PGMQ = '*'
+        CallD Pgm( 'YourCompany.YourApplication.MSGCLR'  )
+    // Message handling parm list
+        // PLIST "#PLMSG" moved by Monarch to global scope.
+    EndSr
+/COPY ".\Copybooks\ErcapCustchk.vr"
+
+/region File Information Data Structures
+    
+    BegProp STATUS Type(*Integer) Len(4)
+        BegGet
+            LeaveSr CUSTDSPF.StatusCode 
+        EndGet
+        BegSet
+            CUSTDSPF.StatusCode = *PropVal
+        EndSet
+    EndProp
+    
+    
+/endregion
+
+    
+    BegSr Reset_#pNbrs
+        #pNbrs = *Zeros
+    EndSr
+ 
+EndClass

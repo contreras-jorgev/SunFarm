@@ -1,0 +1,58 @@
+﻿// ASNA Monarch(R) version 10.0.48.0 at 9/28/2021
+// Migrated source location: library ERCAP, file QRPGSRC, member CUSTSBMJOB
+
+Using SunFarm.CustomerApp_Job
+
+Using System
+Using ASNA.QSys.Runtime
+Using ASNA.QSys.Runtime.JobSupport
+
+BegClass CUSTSBMJOB Extends(Program) Access(*Public) + 
+   Attributes(ActivationGroup('*DFTACTGRP')) + 
+   UsesCycle(*Yes)
+
+    //********************************************************************
+    // This program updates multiple customers without sending a msg.    *
+    //********************************************************************
+    // JB   8/30/2004   Created.
+    //********************************************************************
+    DclDs 
+        DclDsFld wkNumber9         Type( *Zoned   )    Len( 9,0 )
+        DclDsFld wkAlpha9          Type( *Char    )    Len( 9   ) Overlay(wkNumber9, 1)
+    
+    
+    DclArray pNumbers          Type( *Zoned   ) Len( 9  ,0 ) Dim( 20 )
+    DclArray pTypes            Type( *Char    ) Len( 1   ) Dim( 20 )
+    //********************************************************************
+ 
+// Fields defined in main C-Specs declared now as Global fields (Monarch generated)
+    DclFld pCmdLen           Type( *Packed  )    Len( 15,5 )
+    DclFld pString           Type( *Char    )    Len( 80  )
+    DclFld X                 Type( *Packed  )    Len( 3,0 )
+ 
+    BegProc *Entry Access(*Public)
+        DclSrParm pNumbers          By(*Reference)
+        DclSrParm pTypes            By(*Reference)
+ 
+ 
+        ZAdd F2(80) Result(pCmdLen)
+        SetOn *InLR
+    //--------------------------------------------------------------------
+        Do FromVal(1) ToVal(20) Index(X)
+            If( pNumbers[X -1] <> 0 )
+                ZAdd F2(pNumbers[X -1]) Result(wkNumber9)
+                If( pTypes[X -1] = 'C' )
+                    pString = 'SbmJob Cmd(CALL CUSTCRTS Parm(''' + wkAlpha9 + ''')) Job(CustCrt) '
+                Else
+                    pString = 'SbmJob Cmd(CALL CUSTPRTS Parm(''' + wkAlpha9 + ''')) Job(CustPrint) '
+                EndIf
+                CallD Pgm( '?.QCMDEXC'  )
+                    DclParm pString
+                    DclParm pCmdLen
+// TODO : Error  Execution of Command via QCMDEXC not supported.
+            EndIf
+        EndDo
+    EndProc
+    //********************************************************************
+ 
+EndClass

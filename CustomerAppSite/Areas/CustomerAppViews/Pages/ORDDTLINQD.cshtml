@@ -1,0 +1,112 @@
+﻿@page
+@model ORDDTLINQD
+@{
+    ViewData["Title"] = "ORDDTLINQD";
+}
+
+@* Migrated on 9/28/2021 at 10:28 AM by ASNA Monarch(R) version 10.0.48.0 *@
+@* Legacy location: library ERCAP, file QDDSSRC, member ORDDTLINQD *@
+
+
+<form id="MonarchForm" method="post">
+    <DdsFile DisplayPageModel="Model">
+
+        <DdsFunctionKeys />
+
+        <main role="main" class="display-element-uninitialized">
+            <DdsRecord For="MYWINDOW" KeyNames="ENTER 'Enter'; F12 'Previous';" WindowLeftCol=26 WindowTopRow=9 WindowWidthCols=25 WindowHeightRows=6 WindowTitle=@Model.MYWINDOW.WINTITLE ReturnData="True"> 
+                <DdsRecord For="ORDLINE" KeyNames="ENTER 'Enter'; F4 'Prompt';">
+                    <div Row="1">
+                        <DdsCharField Col="2" For="ORDLINE.SDUMMY" Upper=true VisibleCondition="!( !89 )" VirtualRowCol="1,2" tabIndex=1 />
+                    </div>
+                    <div Row="2">
+                        <DdsConstant Col="2" Text="Line Number:" />
+                        <DdsDecField Col="15" For="ORDLINE.SLINNBR" EditCode="Z" />
+                    </div>
+                    <div Row="3">
+                        <DdsConstant Col="2" Text="Item Number:" />
+                        <DdsDecField Col="15" For="ORDLINE.SITMNBR" VirtualRowCol="3,15" InvertFontColors="40" EditCode="Z" tabIndex=2 />
+                    </div>
+                    <div Row="4">
+                        <DdsConstant Col="2" Text="Quantity . :" />
+                        <DdsDecField Col="15" For="ORDLINE.SQTYORD" VirtualRowCol="4,15" InvertFontColors="41" EditCode="Three" tabIndex=3 />
+                    </div>
+                    <div Row="6">
+                        <DdsConstant Col="2" Text="F4=Prompt" VisibleCondition="!( 88 )" Color="Blue" />
+                        <DdsConstant Col="13" Text="F12=Cancel" Color="Blue" />
+                    </div>
+                </DdsRecord>
+            </DdsRecord>
+            @{
+                int SFLC_SubfilePage = 12;
+            }
+            <DdsSubfileControl For="SFLC" KeyNames="ENTER 'Enter'; F6 'New';" SubfilePage="@SFLC_SubfilePage" CueCurrentRecord=true ClickSetsCurrentRecord=true>
+                <div Row="1">
+                    <DdsConstant Col="2" Text=@System.Environment.UserName />
+                    <DdsConstant Col="29+2" Text="M5 Order Detail Inquiry" Color="DarkBlue" />
+                    <DdsConstant Col="64+2" Text=@DateTime.Today.ToString(@"MM\/ dd\/ yy") />
+                    <DdsConstant Col="73+2" Text=@DateTime.Now.ToString("HH: mm: ss") />
+                </div>
+                <div Row="3">
+                    <DdsConstant Col="2" Text="Customer:" />
+                    <DdsCharField Col="12+2" For="SFLC.SCRCUST" Upper=true Comment="CUST NBR, NAME AND CITY" />
+                </div>
+                <div Row="4">
+                    <DdsConstant Col="2" Text="Order...:" />
+                    <DdsDecField Col="12+2" For="SFLC.SORDNUM" EditCode="Z" Comment="ORDER NUMBER" />
+                    <DdsConstant Col="23+2" Text="Date:" />
+                    <DdsDateField Col="29+2" For="SFLC.SORDDATE"  Comment="ORDER DATE" />
+                </div>
+                <div Row="5">
+                    <DdsConstant Col="51+2" Text="Total value.:" />
+                    <DdsCharField Col="65+2" For="SFLC.SORDAMOUNT" Upper=true />
+                </div>
+                <div Row="6">
+                    <DdsConstant Col="2" Text="Options:  2=Update  4=Delete" Color="Blue" />
+                    <DdsConstant Col="51+2" Text="Total weight:" />
+                    <DdsCharField Col="65+2" For="SFLC.SORDWEIGHT" Upper=true />
+                </div>
+                <div Row="8">
+                    <DdsConstant Col="2" Text="Opt Lne   Item Nbr and Description        Unit Price    Order Qty  Extnd Price" Color="DarkBlue" Underline="*True" />
+                </div>
+                <div Row="9" RowSpan="@SFLC_SubfilePage">
+                    @for (int rrn=0; rrn < Model.SFLC.SFL1.Count; rrn++)
+                    {
+                        int row = 9 + rrn;
+                        <DdsSubfileRecord RecordNumber="rrn" For="SFLC.SFL1">
+                            <DdsDecField Col="3" For="SFLC.SFL1[rrn].SFSEL" VisibleCondition="!( 60 )" VirtualRowCol="@row,3" EditCode="Z" ValuesText="'0','2','4'" tabIndex=1 />
+                            <DdsDecField Col="6+2" For="SFLC.SFL1[rrn].SFLINNBR" EditCode="Z" Comment="LINE NUMBER" />
+                            <DdsDecField Col="11+2" For="SFLC.SFL1[rrn].SFITMNBR" EditCode="Z" Comment="ITEM NBR" />
+                            <DdsCharField Col="21+2" For="SFLC.SFL1[rrn].SFITMDESC" Upper=true Comment="ITEM DESC" />
+                            <DdsDecField Col="43+2" For="SFLC.SFL1[rrn].SFPRICE" EditCode="Two" Comment="PRICE" />
+                            <DdsDecField Col="55+2" For="SFLC.SFL1[rrn].SFQTYORD" EditCode="Two" Comment="ORDER QTY" />
+                            <DdsDecField Col="68+2" For="SFLC.SFL1[rrn].SFEXTAMT" EditCode="One" />
+                        </DdsSubfileRecord>
+                    }
+                </div>
+            </DdsSubfileControl>
+            <DdsRecord For="KEYS" KeyNames="ENTER 'Enter'; ">
+                <div Row="23">
+                    <DdsConstant Col="3" Text="F6=Add item   F12=Previous" Color="Blue" />
+                </div>
+            </DdsRecord>
+            @{
+                int MSGSFC_SubfilePage = 1;
+            }
+            <DdsSubfileControl For="MSGSFC" KeyNames="ENTER 'Enter'; " SubfilePage="@MSGSFC_SubfilePage">
+                <div Row="24" RowSpan="@MSGSFC_SubfilePage">
+                    @for (int rrn=0; rrn < Model.MSGSFC.MSGSF.Count; rrn++)
+                    {
+                        int row = 24 + rrn;
+                        <DdsSubfileRecord RecordNumber="rrn" For="MSGSFC.MSGSF">
+                            <DdsCharField Col="2" For="MSGSFC.MSGSF[rrn].MessageText" Upper=true />
+                        </DdsSubfileRecord>
+                    }
+                </div>
+            </DdsSubfileControl>
+
+            <DdsMessagePanel />
+
+        </main>
+    </DdsFile>
+</form>

@@ -1,0 +1,19 @@
+﻿@page
+@model CustomerAppSite.Pages.Asna.DiagnoseModel
+@{
+    ViewData["Title"] = "Abnormal Termination";
+}
+
+    <div style="padding:1em">
+        <h1>Abnormal Termination</h1>
+        <br />
+        <em>There has been an abnormal termination of the program.</em>
+
+        <p><strong>Exception</strong></p>
+        <div style="background-color:yellow;">
+            @Model.AbEndMessage
+        </div>
+
+        <p><strong>StackTrace</strong></p>
+        <pre style="font-size: smaller">@Model.AbEndStack</pre>
+    </div>

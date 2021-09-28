@@ -1,0 +1,57 @@
+﻿@page
+@model CUSTDELIV
+@{
+    ViewData["Title"] = "CUSTDELIV";
+}
+
+@* Migrated on 9/28/2021 at 10:28 AM by ASNA Monarch(R) version 10.0.48.0 *@
+@* Legacy location: library ERCAP, file QDDSSRC, member CUSTDELIV *@
+
+
+<form id="MonarchForm" method="post">
+    <DdsFile DisplayPageModel="Model">
+
+        <DdsFunctionKeys />
+
+        <main role="main" class="display-element-uninitialized">
+            @{
+                int SFLC_SubfilePage = 10;
+            }
+            <DdsSubfileControl For="SFLC" KeyNames="ENTER 'Enter'; PageDown;" SubfilePage="@SFLC_SubfilePage" CueCurrentRecord=true ClickSetsCurrentRecord=true>
+                <div Row="1">
+                    <DdsConstant Col="2" Text=@System.Environment.UserName />
+                    <DdsConstant Col="27+2" Text="M5 Customer Delivery Inquiry" Color="DarkBlue" />
+                    <DdsConstant Col="64+2" Text=@DateTime.Today.ToString(@"MM\/ dd\/ yy") />
+                    <DdsConstant Col="73+2" Text=@DateTime.Now.ToString("HH: mm: ss") />
+                </div>
+                <div Row="3">
+                    <DdsConstant Col="5" Text="1=Select" Color="Blue" />
+                </div>
+                <div Row="5">
+                    <DdsConstant Col="5" Text="Sel Customer Number and Name             Delivery Address          Zip  " Color="DarkBlue" Underline="*True" />
+                </div>
+                <div Row="6" RowSpan="@SFLC_SubfilePage">
+                    @for (int rrn=0; rrn < Model.SFLC.SFL1.Count; rrn++)
+                    {
+                        int row = 6 + rrn;
+                        <DdsSubfileRecord RecordNumber="rrn" For="SFLC.SFL1">
+                            <DdsCharField Col="6" For="SFLC.SFL1[rrn].SFLSEL" Upper=true VisibleCondition="!( 60 )" VirtualRowCol="@row,6" tabIndex=1 />
+                            <DdsDecField Col="8+2" For="SFLC.SFL1[rrn].SFLCUSTh" EditCode="Z" />
+                            <DdsCharField Col="18+2" For="SFLC.SFL1[rrn].SFLCUST" Upper=true />
+                            <DdsCharField Col="46+2" For="SFLC.SFL1[rrn].SFLCITY" Upper=true />
+                            <DdsCharField Col="72+2" For="SFLC.SFL1[rrn].SFLZIP" Upper=true />
+                        </DdsSubfileRecord>
+                    }
+                </div>
+            </DdsSubfileControl>
+            <DdsRecord For="KEYS" KeyNames="ENTER 'Enter'; ">
+                <div Row="23">
+                    <DdsConstant Col="5" Text="F12=Previous" Color="Blue" />
+                </div>
+            </DdsRecord>
+
+            <DdsMessagePanel />
+
+        </main>
+    </DdsFile>
+</form>

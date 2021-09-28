@@ -1,0 +1,10 @@
+﻿{
+  "version": "1.0",
+  "libraries": [
+    {
+      "provider": "jsdelivr",
+      "library": "asnaqsys/asna-qsys-expo-web-content@2.1.0",
+      "destination": "wwwroot/lib/asna-expo"
+    }
+  ]
+}

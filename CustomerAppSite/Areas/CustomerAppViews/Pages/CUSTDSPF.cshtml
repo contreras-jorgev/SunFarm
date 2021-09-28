@@ -1,0 +1,175 @@
+﻿@page
+@model CUSTDSPF
+@{
+    ViewData["Title"] = "CUSTDSPF";
+}
+
+@* Migrated on 9/28/2021 at 10:28 AM by ASNA Monarch(R) version 10.0.48.0 *@
+@* Legacy location: library ERCAP, file QDDSSRC, member CUSTDSPF *@
+
+
+<form id="MonarchForm" method="post">
+    <DdsFile DisplayPageModel="Model">
+
+        <DdsFunctionKeys />
+
+        <main role="main" class="display-element-uninitialized">
+            @{
+                int SFLC_SubfilePage = 14;
+            }
+            <DdsSubfileControl For="SFLC" KeyNames="ENTER 'Enter'; F9 'Spooled Files'; PageUp; PageDown;" SubfilePage="@SFLC_SubfilePage" CueCurrentRecord=true ClickSetsCurrentRecord=true>
+                <div Row="1">
+                    <DdsConstant Col="2" Text=@System.Environment.UserName />
+                    <DdsConstant Col="31+1" Text="M5 Customer Inquiry" Color="DarkBlue" />
+                    <DdsConstant Col="64+1" Text=@DateTime.Today.ToString(@"MM\/ dd\/ yy") />
+                    <DdsConstant Col="73+1" Text=@DateTime.Now.ToString("HH: mm: ss") />
+                </div>
+                <div Row="2">
+                    <DdsConstant Col="52+1" Text="Position to name:" />
+                    <DdsCharField Col="70+1" For="SFLC.SETNAME" VirtualRowCol="2,70" tabIndex=1 />
+                </div>
+                <div Row="4">
+                    <DdsConstant Col="3" Text="2=Update   3=Display sales    5=Delivery Addresses    7=Create sales record     9=Print" Color="Blue" />
+                </div>
+                <div Row="5">
+                    <DdsConstant Col="3" Text="sales (Online)  10=Print sales (Batch)    11=Orders" Color="Blue" />
+                </div>
+                <div Row="7">
+                    <DdsConstant Col="3" Text="Sel" Color="DarkBlue" Underline="*True" />
+                    <DdsConstant Col="7+1" Text="Custno" Color="DarkBlue" Underline="*True" />
+                    <DdsConstant Col="14+1" Text="Customer Name" Color="DarkBlue" Underline="*True" />
+                    <DdsConstant Col="55+1" Text="City / State / Zip" Color="DarkBlue" Underline="*True" />
+                </div>
+                <div Row="8" RowSpan="@SFLC_SubfilePage">
+                    @for (int rrn=0; rrn < Model.SFLC.SFL1.Count; rrn++)
+                    {
+                        int row = 8 + rrn;
+                        <DdsSubfileRecord RecordNumber="rrn" For="SFLC.SFL1">
+                            <DdsDecField Col="4" For="SFLC.SFL1[rrn].SFSEL" VirtualRowCol="@row,4" EditCode="Z" ValuesText="'0','2','3','5','7','9','10','11'" tabIndex=2 />
+                            <DdsDecField Col="7+1" For="SFLC.SFL1[rrn].SFCUSTNO" Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" EditCode="Z" Comment="CUSTOMER NUMBER" />
+                            <DdsCharField Col="14+1" For="SFLC.SFL1[rrn].SFNAME1" Upper=true Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" />
+                            <DdsCharField Col="55+1" For="SFLC.SFL1[rrn].SFCSZ" Upper=true Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" Comment="CITY-STATE-ZIP" />
+                        </DdsSubfileRecord>
+                    }
+                </div>
+            </DdsSubfileControl>
+            <DdsRecord For="CUSTREC" KeyNames="ENTER 'Enter'; F4 'Prompt'; F6 'New'; F11 'Delete'; F12 'Cancel';">
+                <div Row="1">
+                    <DdsConstant Col="2" Text=@System.Environment.UserName />
+                    <DdsConstant Col="29+5" Text="M5 Customer Maintenance" Color="DarkBlue" />
+                    <DdsConstant Col="64+5" Text=@DateTime.Today.ToString(@"MM\/ dd\/ yy") />
+                    <DdsConstant Col="73+5" Text=@DateTime.Now.ToString("HH: mm: ss") />
+                </div>
+                <div Row="2">
+                    <DdsCharField Col="2" For="CUSTREC.SCPGM" Upper=true />
+                </div>
+                <div Row="5">
+                    <DdsDecField Col="27" For="CUSTREC.SFCUSTNO" Color="DarkBlue" EditCode="Z" Comment="CUSTOMER NUMBER" />
+                    <DdsCharField Col="35+5" For="CUSTREC.SFOLDNAME" Upper=true Color="DarkBlue" />
+                </div>
+                <div Row="7">
+                    <DdsConstant Col="20" Text="Name:" />
+                    <DdsCharField Col="27" For="CUSTREC.SFNAME" VirtualRowCol="7,27" PositionCursor="40" tabIndex=2 />
+                </div>
+                <div Row="8">
+                    <DdsConstant Col="17" Text="Address:" />
+                    <DdsCharField Col="27" For="CUSTREC.SFADDR1" VirtualRowCol="8,27" PositionCursor="41" tabIndex=3 />
+                </div>
+                <div Row="9">
+                    <DdsCharField Col="27" For="CUSTREC.SFADDR2" VirtualRowCol="9,27" tabIndex=4 />
+                </div>
+                <div Row="10">
+                    <DdsConstant Col="20" Text="City:" />
+                    <DdsCharField Col="27" For="CUSTREC.SFCITY" VirtualRowCol="10,27" PositionCursor="42" tabIndex=5 />
+                </div>
+                <div Row="11">
+                    <DdsConstant Col="15" Text="State/Zip:" />
+                    <DdsCharField Col="27" For="CUSTREC.SFSTATE" Upper=true VirtualRowCol="11,27" PositionCursor="43" tabIndex=6 />
+                    <DdsConstant Col="30+5" Text="(F4)" Color="Blue" />
+                    <DdsCharField Col="37+5" For="CUSTREC.SFPOSTCODE" Upper=true VirtualRowCol="11,37" tabIndex=7 />
+                </div>
+                <div Row="13">
+                    <DdsConstant Col="21" Text="Fax:" />
+                    <DdsDecField Col="27" For="CUSTREC.SFFAX" VirtualRowCol="13,27" EditWord="(   )   -    " tabIndex=8 />
+                </div>
+                <div Row="14">
+                    <DdsConstant Col="19" Text="Phone:" />
+                    <DdsCharField Col="27" For="CUSTREC.SFPHONE" Upper=true VirtualRowCol="14,27" tabIndex=9 />
+                </div>
+                <div Row="15">
+                    <DdsConstant Col="18" Text="Status:" />
+                    <DdsCharField Col="27" For="CUSTREC.SFSTATUS" Upper=true VirtualRowCol="15,27" PositionCursor="44" tabIndex=10 />
+                    <DdsConstant Col="30+5" Text="(F4)" Color="Blue" />
+                </div>
+                <div Row="16">
+                    <DdsConstant Col="12" Text="Contact Name:" />
+                    <DdsCharField Col="27" For="CUSTREC.SFCONTACT" Upper=true VirtualRowCol="16,27" tabIndex=11 />
+                </div>
+                <div Row="17">
+                    <DdsConstant Col="11" Text="Contact eMail:" />
+                    <DdsCharField Col="27" For="CUSTREC.SFCONEMAL" Upper=true VirtualRowCol="17,27" tabIndex=12 />
+                </div>
+                <div Row="18">
+                    <DdsConstant Col="7" Text="Send Confirmation:" />
+                    <DdsCharField Col="27" For="CUSTREC.SFYN01" Upper=true VirtualRowCol="18,27" tabIndex=13 />
+                    <DdsConstant Col="29+5" Text="(Y/N)" />
+                </div>
+                <div Row="23">
+                    <DdsConstant Col="3" Text="F4=Prompt" Color="Blue" />
+                    <DdsConstant Col="15" Text="F6=New customer" VisibleCondition="!30" Color="Blue" />
+                    <DdsConstant Col="33+5" Text="F11=Remove customer" VisibleCondition="!30" Color="Blue" />
+                    <DdsConstant Col="55+5" Text="F12=Cancel" Color="Blue" />
+                </div>
+            </DdsRecord>
+            <DdsRecord For="SALESREC" KeyNames="ENTER 'Enter'; F12 'Cancel';">
+                <div Row="1">
+                    <DdsConstant Col="2" Text=@System.Environment.UserName />
+                    <DdsConstant Col="28" Text="M5 Customer Sales/Returns" Color="DarkBlue" />
+                    <DdsConstant Col="64" Text=@DateTime.Today.ToString(@"MM\/ dd\/ yy") />
+                    <DdsConstant Col="73" Text=@DateTime.Now.ToString("HH: mm: ss") />
+                </div>
+                <div Row="2">
+                    <DdsCharField Col="2" For="SALESREC.SCPGM" Upper=true />
+                    <DdsConstant Col="32" Text="Sales Information" Color="DarkBlue" />
+                </div>
+                <div Row="7">
+                    <DdsDecField Col="20" For="SALESREC.SFCUSTNO" Color="DarkBlue" EditCode="Z" Comment="CUSTOMER NUMBER" />
+                    <DdsCharField Col="28" For="SALESREC.SFNAME" Upper=true Color="DarkBlue" />
+                </div>
+                <div Row="10">
+                    <DdsConstant Col="22" Text="Total Sales:" />
+                    <DdsDecField Col="35" For="SALESREC.SFSALES" Color="DarkBlue" EditCode="J" />
+                </div>
+                <div Row="12">
+                    <DdsConstant Col="20" Text="Total Returns:" />
+                    <DdsDecField Col="35" For="SALESREC.SFRETURNS" Color="DarkBlue" EditCode="J" />
+                </div>
+                <div Row="23">
+                    <DdsConstant Col="3" Text="F12=Previous" Color="Blue" />
+                </div>
+            </DdsRecord>
+            <DdsRecord For="KEYS" KeyNames="ENTER 'Enter'; ">
+                <div Row="23">
+                    <DdsConstant Col="3" Text="F3=Exit  F9=Spool Files" Color="Blue" />
+                </div>
+            </DdsRecord>
+            @{
+                int MSGSFC_SubfilePage = 1;
+            }
+            <DdsSubfileControl For="MSGSFC" KeyNames="ENTER 'Enter'; " SubfilePage="@MSGSFC_SubfilePage">
+                <div Row="24" RowSpan="@MSGSFC_SubfilePage">
+                    @for (int rrn=0; rrn < Model.MSGSFC.MSGSF.Count; rrn++)
+                    {
+                        int row = 24 + rrn;
+                        <DdsSubfileRecord RecordNumber="rrn" For="MSGSFC.MSGSF">
+                            <DdsCharField Col="2" For="MSGSFC.MSGSF[rrn].MessageText" Upper=true />
+                        </DdsSubfileRecord>
+                    }
+                </div>
+            </DdsSubfileControl>
+
+            <DdsMessagePanel />
+
+        </main>
+    </DdsFile>
+</form>

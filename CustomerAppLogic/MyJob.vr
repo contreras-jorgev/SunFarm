@@ -1,0 +1,52 @@
+﻿// ASNA Monarch(R) version 10.0.48.0 at 9/28/2021
+Using System
+Using YourCompany.YourApplication
+Using ASNA.QSys.Runtime
+Using ASNA.QSys.Runtime.JobSupport
+DclNamespace SunFarm.CustomerApp_Job
+
+BegClass MyJob Extends(InteractiveJob)  Access(*Public)
+    DclDB Name(MyDatabase) DBName("CYPRESS_5160") Access(*Public) 
+    DclDB Name(MyPrinterDB) DBName("MonarchLocal") Access(*Public)
+    
+    BegFunc getDatabase Type(Database) Access(*Protected) Modifier(*Overrides)
+        LeaveSR MyDatabase
+    EndFunc
+    
+    BegFunc getPrinterDB Type(Database) Access(*Protected) Modifier(*Overrides)
+	   LeaveSR MyPrinterDB
+	EndFunc
+
+    BegSr Dispose Access(*Public) Modifier(*Overrides)
+        DclSrParm disposing Type(*Boolean)
+        If disposing
+            Disconnect  MyDatabase
+            Disconnect  MyPrinterDB
+        EndIf
+        *Base.Dispose(Disposing)
+    EndSr
+
+    BegConstructor Base(jobConfig)
+       DclSrParm jobConfig Type(JobConfig)
+    EndConstructor
+
+    BegFunc JobFactory Access(*Public) Shared(*Yes) Type(MyJob)
+        DclFld job       Type(MyJob)
+        DclFld jobConfig Type(JobConfig) New()
+        
+        jobConfig.IFSRootPath = "//MyServer/MyShare"
+        jobConfig.OutputQueueRootPath = "C:\\MonarchQueues\\OutputQueues"
+        jobConfig.JobQueueBaseQueuesPath = "C:\\MonarchQueues\\JobQueues"
+
+        job = *new MyJob(jobConfig)
+        LeaveSr job     
+    EndFunc
+
+    BegSr  ExecuteStartupProgram Access(*Protected) Modifier(*Overrides)
+        Connect     MyDatabase
+        Connect     MyPrinterDB
+        
+        CallD       'YourCompany.YourApplication.Runci'
+    EndSr
+    
+EndClass

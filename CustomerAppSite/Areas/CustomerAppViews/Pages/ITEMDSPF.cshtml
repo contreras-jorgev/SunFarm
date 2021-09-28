@@ -1,0 +1,127 @@
+﻿@page
+@model ITEMDSPF
+@{
+    ViewData["Title"] = "ITEMDSPF";
+}
+
+@* Migrated on 9/28/2021 at 10:28 AM by ASNA Monarch(R) version 10.0.48.0 *@
+@* Legacy location: library ERCAP, file QDDSSRC, member ITEMDSPF *@
+
+
+<form id="MonarchForm" method="post">
+    <DdsFile DisplayPageModel="Model">
+
+        <DdsFunctionKeys />
+
+        <main role="main" class="display-element-uninitialized">
+            @{
+                int SFLC_SubfilePage = 14;
+            }
+            <DdsSubfileControl For="SFLC" KeyNames="ENTER 'Enter'; PageUp; PageDown;" SubfilePage="@SFLC_SubfilePage" CueCurrentRecord=true ClickSetsCurrentRecord=true>
+                <div Row="1">
+                    <DdsConstant Col="2" Text=@System.Environment.UserName />
+                    <DdsConstant Col="31+1" Text="M5 Item Inquiry" Color="DarkBlue" />
+                    <DdsConstant Col="64+1" Text=@DateTime.Today.ToString(@"MM\/ dd\/ yy") />
+                    <DdsConstant Col="73+1" Text=@DateTime.Now.ToString("HH: mm: ss") />
+                </div>
+                <div Row="3">
+                    <DdsConstant Col="43+1" Text="Position to item:" />
+                    <DdsCharField Col="61+1" For="SFLC.SETITMDSC" VirtualRowCol="3,61" tabIndex=1 />
+                </div>
+                <div Row="4">
+                    <DdsConstant Col="3" Text="1=Select" Color="Blue" />
+                </div>
+                <div Row="7">
+                    <DdsConstant Col="3" Text="Sel      Item Nbr and Description             Price             Qty Available" Color="DarkBlue" Underline="*True" />
+                </div>
+                <div Row="8" RowSpan="@SFLC_SubfilePage">
+                    @for (int rrn=0; rrn < Model.SFLC.SFL1.Count; rrn++)
+                    {
+                        int row = 8 + rrn;
+                        <DdsSubfileRecord RecordNumber="rrn" For="SFLC.SFL1">
+                            <DdsDecField Col="4" For="SFLC.SFL1[rrn].SFSEL" VisibleCondition="!( 60 )" VirtualRowCol="@row,4" EditCode="Z" ValuesText="'0','1'" tabIndex=2 />
+                            <DdsDecField Col="8+1" For="SFLC.SFL1[rrn].SFITEMNUM" Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" EditCode="Z" />
+                            <DdsCharField Col="19+1" For="SFLC.SFL1[rrn].SFITEMDESC" Upper=true Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" />
+                            <DdsDecField Col="43+1" For="SFLC.SFL1[rrn].SFITMPRIC" Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" EditCode="A" />
+                            <DdsDecField Col="65+1" For="SFLC.SFL1[rrn].SFITMAVAIL" Color="Green : !61 , DarkBlue : 61" InvertFontColors="*True" EditCode="J" />
+                        </DdsSubfileRecord>
+                    }
+                </div>
+            </DdsSubfileControl>
+            <DdsRecord For="ITEMREC" KeyNames="ENTER 'Enter'; F4 'Prompt'; F6 'New'; F11 'Delete'; F12 'Previous';">
+                <div Row="1">
+                    <DdsConstant Col="2" Text=@System.Environment.UserName />
+                    <DdsConstant Col="31" Text="M5 Item Maintenance" Color="DarkBlue" />
+                    <DdsConstant Col="64" Text=@DateTime.Today.ToString(@"MM\/ dd\/ yy") />
+                    <DdsConstant Col="73" Text=@DateTime.Now.ToString("HH: mm: ss") />
+                </div>
+                <div Row="2">
+                    <DdsCharField Col="2" For="ITEMREC.SCPGM" Upper=true />
+                </div>
+                <div Row="4">
+                    <DdsCharField Col="27" For="ITEMREC.SFOLDDESC" Upper=true Color="DarkBlue" />
+                </div>
+                <div Row="6">
+                    <DdsConstant Col="14" Text="Item Number:" />
+                    <DdsDecField Col="27" For="ITEMREC.SFITEM" EditCode="Z" />
+                </div>
+                <div Row="7">
+                    <DdsConstant Col="9" Text="Long Description:" />
+                    <DdsCharField Col="27" For="ITEMREC.SFLNGDESC" VirtualRowCol="7,27" tabIndex=2 />
+                </div>
+                <div Row="8">
+                    <DdsConstant Col="14" Text="Description:" />
+                    <DdsCharField Col="27" For="ITEMREC.SFDESC" VirtualRowCol="8,27" PositionCursor="41" tabIndex=3 />
+                </div>
+                <div Row="9">
+                    <DdsConstant Col="20" Text="Price:" />
+                    <DdsDecField Col="27" For="ITEMREC.SFPRICE" VirtualRowCol="9,27" PositionCursor="42" EditCode="Three" tabIndex=4 />
+                </div>
+                <div Row="10">
+                    <DdsConstant Col="10" Text="Unit of Measure:" />
+                    <DdsCharField Col="27" For="ITEMREC.SFUNIT" VirtualRowCol="10,27" PositionCursor="43" tabIndex=5 />
+                </div>
+                <div Row="11">
+                    <DdsConstant Col="10" Text="Weight (ounces):" />
+                    <DdsDecField Col="27" For="ITEMREC.SFWEIGHT" VirtualRowCol="11,27" PositionCursor="44" EditCode="Three" tabIndex=6 Comment="WEIGHT" />
+                </div>
+                <div Row="12">
+                    <DdsConstant Col="12" Text="Qty Available:" />
+                    <DdsDecField Col="27" For="ITEMREC.SFAVAIL" VirtualRowCol="12,27" EditCode="J" tabIndex=7 />
+                </div>
+                <div Row="13">
+                    <DdsConstant Col="13" Text="Qty on Order:" />
+                    <DdsDecField Col="27" For="ITEMREC.SFONORDR" VirtualRowCol="13,27" EditCode="J" tabIndex=8 />
+                </div>
+                <div Row="23">
+                    <DdsConstant Col="3" Text="F4=Prompt" Color="Blue" />
+                    <DdsConstant Col="15" Text="F6=New item" VisibleCondition="!30" Color="Blue" />
+                    <DdsConstant Col="29" Text="F11=Remove item" VisibleCondition="!30" Color="Blue" />
+                    <DdsConstant Col="47" Text="F12=Previous" Color="Blue" />
+                </div>
+            </DdsRecord>
+            <DdsRecord For="KEYS" KeyNames="ENTER 'Enter'; ">
+                <div Row="23">
+                    <DdsConstant Col="3" Text="F3=Exit" Color="Blue" />
+                </div>
+            </DdsRecord>
+            @{
+                int MSGSFC_SubfilePage = 1;
+            }
+            <DdsSubfileControl For="MSGSFC" KeyNames="ENTER 'Enter'; " SubfilePage="@MSGSFC_SubfilePage">
+                <div Row="24" RowSpan="@MSGSFC_SubfilePage">
+                    @for (int rrn=0; rrn < Model.MSGSFC.MSGSF.Count; rrn++)
+                    {
+                        int row = 24 + rrn;
+                        <DdsSubfileRecord RecordNumber="rrn" For="MSGSFC.MSGSF">
+                            <DdsCharField Col="2" For="MSGSFC.MSGSF[rrn].MessageText" Upper=true />
+                        </DdsSubfileRecord>
+                    }
+                </div>
+            </DdsSubfileControl>
+
+            <DdsMessagePanel />
+
+        </main>
+    </DdsFile>
+</form>

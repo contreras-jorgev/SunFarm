@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Message File ERCAP/ITEMMSGF ASNA Monarch(R) version 10.0.48.0 at 9/28/2021 -->
+<LegacyMsgFileContents version="1.0">
+<messages>
+<MSG MSGID="ITM0001" SEVERITY="0" DATACOUNT="1" TEXT="Item &amp;1 has been added" SECLVL="" TYPE1="*CHAR" LEN1="9" DEC1="0"                                                                             />
+<MSG MSGID="ITM0002" SEVERITY="0" DATACOUNT="1" TEXT="Item &amp;1 has been updated" SECLVL="" TYPE1="*CHAR" LEN1="9" DEC1="0"                                                                           />
+<MSG MSGID="ITM0003" SEVERITY="0" DATACOUNT="1" TEXT="Item &amp;1 has been deleted" SECLVL="" TYPE1="*CHAR" LEN1="9" DEC1="0"                                                                           />
+<MSG MSGID="ITM0004" SEVERITY="0" DATACOUNT="1" TEXT="The &amp;1 cannot be blank" SECLVL="" TYPE1="*CHAR" LEN1="25" DEC1="0"                                                                            />
+<MSG MSGID="ITM0005" SEVERITY="0" DATACOUNT="1" TEXT="The &amp;1 cannot be zero" SECLVL="" TYPE1="*CHAR" LEN1="25" DEC1="0"                                                                             />
+<MSG MSGID="ORD0001" SEVERITY="0" DATACOUNT="1" TEXT="Order &amp;1 has been added" SECLVL="" TYPE1="*CHAR" LEN1="9" DEC1="0"                                                                            />
+<MSG MSGID="ORD0002" SEVERITY="0" DATACOUNT="1" TEXT="Order &amp;1 has been updated" SECLVL="" TYPE1="*CHAR" LEN1="9" DEC1="0"                                                                          />
+<MSG MSGID="ORD0003" SEVERITY="0" DATACOUNT="1" TEXT="Order &amp;1 has been deleted" SECLVL="" TYPE1="*CHAR" LEN1="9" DEC1="0"                                                                          />
+<MSG MSGID="ORD0004" SEVERITY="30" DATACOUNT="0" TEXT="The order date cannot be blank" SECLVL=""               />
+<MSG MSGID="ORD0005" SEVERITY="30" DATACOUNT="0" TEXT="The ship via code cannot be blank" SECLVL=""            />
+</messages>
+</LegacyMsgFileContents>

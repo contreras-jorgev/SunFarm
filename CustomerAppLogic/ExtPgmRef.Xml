@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--ASNA Monarch Cocoon Migrated GamePlan External Program References-->
+<MonarchCocoonExtPgmRef version="1.0">
+  <Program Name="CUSTSBMJOB">
+    <ExternalCall Name="QCMDEXC" />
+  </Program>
+</MonarchCocoonExtPgmRef>

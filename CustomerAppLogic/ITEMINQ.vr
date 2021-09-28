@@ -1,0 +1,419 @@
+﻿// ASNA Monarch(R) version 10.0.48.0 at 9/28/2021
+// Migrated source location: library ERCAP, file QRPGSRC, member ITEMINQ
+
+Using SunFarm.CustomerApp_Job
+
+Using System
+Using ASNA.QSys.Runtime
+Using ASNA.QSys.Runtime.JobSupport
+
+BegClass ITEMINQ Extends(Program) Access(*Public) + 
+   Attributes(ActivationGroup('*DFTACTGRP')) + 
+   UsesCycle(*Yes)
+
+    //********************************************************************
+    // INDICATORS:
+    //   03     F3 pressed
+    //   40-44  Cursor positioning
+    //   50     PageUp pressed
+    //   51     PageDown pressed
+    //   66     EOF reading on the subfile
+    //   76     BOF reading CUSTOMERL2
+    //   77     EOF reading CUSTMOMER2
+    //   88     LR seton in a called program
+    //   99     General error indicator
+    //********************************************************************
+    DclWorkStnFile ITEMDSPF DspFile("~\Areas\CustomerAppViews\Pages\ITEMDSPF") Subfile( sfl1,sflrrn )
+    DclDiskFile ITEMMASTL2  Type(*Input) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/ITEMMASTL2") ImpOpen(*No) RnmFmt( L2RECFMT )
+    DclDiskFile ITEMMASTL1  Type(*Update) AddRec(*Yes) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/ITEMMASTL1") ImpOpen(*No) RnmFmt( L1RECFMT )
+    //********************************************************************
+    DclDs 
+        DclDsFld #pNbrs            Type( *Zoned   )    Len( 3,0 )
+    
+    
+    DclArray pNumbers          Type( *Zoned   ) Len( 9  ,0 ) Dim( 20 )
+    DclFld MID               Type( *Char    )    Len( 7   )
+    DclFld MTX               Type( *Char    )    Len( 30  )
+    DclFld LockRec           Type( *Char    )    Len( 1   )
+    DclFld X                 Type( *Packed  )    Len( 5,0 ) Inz( 0 )
+    DclDs 
+        DclDsFld SVITEMNO          Type( *Zoned   )    Len( 9,0 )
+    
+    
+    // ITEM       DS
+    DclDs ITEMDS ExtDesc(*Yes) DbDesc(MyJob.MyDatabase) FileDesc("*LIBL/ITEMMASTER")
+    
+/region Program Status Data Structure
+    DclDs 
+        DclDsFld NbrOfparms        Type( *Zoned   )    Len( 3,0 )
+    
+/endregion
+    //********************************************************************
+ 
+// Fields defined in main C-Specs declared now as Global fields (Monarch generated)
+    DclFld AddUpd            Type( *Char    )    Len( 1   )
+    DclFld Name20            Type( *Char    )    Len( 20  )
+    DclFld pRtnItem          Type( *Packed  )    Len( 9,0 )
+    DclFld pSelOnly          Type( *Char    )    Len( 1   )
+    DclFld savrrn            Type( *Packed  )    Len( 4,0 )
+    DclFld sflrrn            Type( *Packed  )    Len( 4,0 )
+    DclFld TEMPNO            Type( *Packed  )    Len( 9,0 )
+ 
+    // PLIST(s) relocated by Monarch
+    DclPList #PLMSG
+        DclParm MID
+        DclParm MTX
+    
+ 
+    // KLIST(s) relocated by Monarch
+    DclKList KeyMastL2
+        DclKFld ITEMshrtds 
+        DclKFld ITEMNUMBER 
+    
+ 
+/region Constructor and Dispose 
+    BegConstructor Access(*Public)
+ 
+        // Initialization of Data Structure fields (Monarch generated)
+        ExSr Reset_#pNbrs
+ 
+        Open ITEMMASTL1 DB(CurrentJob.Database)
+        Open ITEMMASTL2 DB(CurrentJob.Database)
+    EndConstructor
+ 
+    BegSr Dispose  Access( *Public ) Modifier(*Overrides)
+        DclSrParm disposing Type(*Boolean)
+        If( disposing )
+            Close *All
+        EndIf
+        *Base.Dispose(Disposing)
+    EndSr
+ 
+ 
+/endregion
+    BegProc *Entry Access(*Public)
+        DclSrParm pSelOnly          By(*Reference)
+        DclSrParm pRtnItem          By(*Reference)
+ 
+        NbrOfparms = *Parms
+ 
+    //********************************************************************
+        // KLIST "KeyMastL2" moved by Monarch to global scope.
+    //********************************************************************
+        If( NbrOfParms > 1 )
+            ZAdd F2(0) Result(pRtnItem)
+        EndIf
+    //********************************************************************
+        DoUntil ( *In03)
+            *In90 = '0'
+            Write MSGSFC
+            Write keys
+            ExFmt sflc 
+            ExSr ClearMsgs
+    //--------------------------------------------------------------------
+            Select
+    // Exit
+                When ( *In03)
+                    *InLR = '1'
+                    Leave
+    // PageUp-RollDown
+                When ( *In50)
+                    SetLL L2RecFmt Key(ITEMshrtds)
+                    ExSr LoadSfl
+                When ( Setitmdsc <> *Blanks )
+                    MoveL Setitmdsc Name20 Fill(*Pad)
+                    SetLL L2RecFmt Key(Name20)
+                    ExSr Loadsfl
+    // PageDown-RollUp
+                When ( *In51)
+                    ExSr ReadBack
+                    ExSr LoadSfl
+                When ( SetItmDsc <> *Blanks )
+                    MoveL Setitmdsc Name20 Fill(*Pad)
+                    SetLL L2RecFmt Key(Name20)
+                    ExSr Loadsfl
+                Other
+                    SetOff IndList( *In30, *In66 )
+                    ZAdd F2(sflrrn) Result(savrrn)
+                    ZAdd F2(0) Result(pNumbers)
+                    ZAdd F2(0) Result(#pNbrs)
+                    DoUntil ( *In66)
+                        ReadC sfl1 Eof(*In66)
+                        If( *Not *In66)
+                            Select
+                                When ( SFSEL = 1 ) // Maintainance.
+                                    If( NbrOfParms > 1 )
+                                        If( pSelOnly = 'Y' ) // If only selecting,
+                                            ZAdd F2(SFITEMNUM) Result(pRtnItem) //  setup the item nbr
+                                            SetOn *In03 //  and return.
+                                            Leave
+                                        EndIf
+                                    EndIf
+                                    ExSr RcdUpdate
+                            EndSl
+                        EndIf
+                    EndDo
+                    ZAdd F2(savrrn) Result(sflrrn)
+            EndSl
+        EndDo
+        *InLR = *On
+    //*********************************************************************
+    // UPDATE THE Item RECORD
+    //*********************************************************************
+    EndProc
+    BegSr RcdUpdate
+        ExSr ClearSel
+        Move 'U' AddUpd
+        ZAdd F2(SFitemnum) Result(ItemNumber)
+        MoveL 'N' LockRec
+        ExSr ItemChk
+        ZAdd F2(ItemNumber) Result(SFitem)
+        MoveL Itemdesc SFlngdesc
+        MoveL Itemshrtds SFolddesc
+        MoveL Itemshrtds SFdesc
+        MoveL ItemPrice SFprice
+        ZAdd F2(ItemWeight) Result(SFweight)
+        MoveL ItemQtyavl SFavail
+        MoveL ItemQtyord SFonordr
+        SetOn *In40 // Place the cursor on
+        SetOff IndList( *In41, *In42, *In43 ) //  the name field.
+        SetOff IndList( *In44, *In99 )
+    //-------------------------------------------------------
+        DoUntil ( *In12)
+            Write MSGSFC
+            ExFmt ItemREC 
+            SetOff IndList( *In40, *In41, *In42 )
+            SetOff IndList( *In43, *In44 )
+            ExSr ClearMsgs
+            *In30 = '0'
+            Select
+                When ( *In03)
+                    Leave
+                When ( *In12)
+                    Leave
+                When ( *In06)
+                    ZAdd F2(ItemNumber) Result(SvItemNo)
+                    SetGT L1RecFmt Key(*Hival)
+                    ReadP L1RecFmt Access(*NoLock)
+                    ADD F1(ItemNumber) F2(100) Result(TEMPNO)
+                    Clear ItemDs
+                    ZAdd F2(TEMPNO) Result(ItemNumber)
+                    Move 'A' AddUpd
+                    ZAdd F2(TEMPNO) Result(SFitem)
+                    MoveL *Blanks SFlngdesc
+                    MoveL *Blanks SFdesc
+                    MoveL *Blanks SFprice
+                    MoveL *Blanks SFunit
+                    ZAdd F2(0) Result(SFWeight)
+                    MoveL *zeros SFavail
+                    MoveL *zeros SFonordr
+                    *In30 = '1'
+    // Delete - leave sales hanging?
+                When ( *In11)
+                    MoveL 'Y' LockRec
+                    ExSr ItemChk
+                    If( *Not(*In80) )
+                        Delete From(L1RecFmt)
+                    EndIf
+                    Chain SFL1 Key(Sflrrn)
+                    Move *Zeros SFItmPric
+                    Move *Zeros SFItmAvail
+                    SFItemDesc = '*** DELETED ***'
+    // Set the color
+                    *In60 = '1'
+                    Update SFL1
+                    *In60 = '0'
+    // Delete msg
+                    MID = 'ITM0003'
+                    Move ItemNumber MTX
+                    CallD Pgm( 'YourCompany.YourApplication.MSGLOD'  ) ParmList(#PLMSG)
+                    Leave
+    // Add/update on the Enter key
+                Other
+                    If( AddUpd = 'A' )
+                        ExSr EditFlds
+                        If( *In99) // Any errors?
+                            Iterate
+                        EndIf
+                        ExSr UpdDbFlds
+                        Write L1RecFmt
+                        SetLL L2RecFmt Key(*loval)
+                        ExSr Loadsfl
+    // Added message
+                        MID = 'ITM0001'
+                        Move SFITEM MTX
+                        CallD Pgm( 'YourCompany.YourApplication.MSGLOD'  ) ParmList(#PLMSG)
+                        Leave
+    // Update the database
+                    Else
+                        ExSr EditFlds
+                        If( *In99) // Any errors?
+                            Iterate
+                        EndIf
+                        MoveL 'Y' LockRec
+                        ExSr ItemChk //Reread the record.
+                        ExSr UpdDbFlds
+                        Update L1RecFmt
+                        Chain SFL1 Key(sflrrn)
+                        MoveL ItemNumber SFitemnum
+                        MoveL ItemShrtds SFitemdesc
+                        ZAdd F2(ItemPrice) Result(SFitmpric)
+                        ZAdd F2(ItemQtyavl) Result(SFitmavail)
+                        Update SFL1
+    // Updated message
+                        MID = 'ITM0002'
+                        MoveL ItemNumber MTX
+                        CallD Pgm( 'YourCompany.YourApplication.MSGLOD'  ) ParmList(#PLMSG)
+                    EndIf
+    // Re-open for the next update
+                    MoveL 'N' LockRec
+                    ExSr ItemChk
+            EndSl
+        EndDo
+    EndSr
+    //*********************************************************************
+    //  EDIT THE SCREEN FIELDS
+    //*********************************************************************
+    BegSr EditFlds
+        SetOff IndList( *In40, *In41, *In42 ) //Clear all error inds
+        SetOff IndList( *In43, *In44, *In99 )
+        Select
+            When ( SFlngdesc = *Blanks )
+                SetOn IndList( *In40, *In99 )
+                MID = 'ITM0004' // Blank field.
+                MTX = 'Long description'
+            When ( SFdesc = *Blanks )
+                SetOn IndList( *In41, *In99 )
+                MID = 'ITM0004' // Blank field.
+                MTX = 'Description'
+            When ( SFprice = *zero )
+                SetOn IndList( *In42, *In99 )
+                MID = 'ITM0005' // Blank field.
+                MTX = 'Price'
+            When ( SFUNIT = *Blanks )
+                SetOn IndList( *In43, *In99 )
+                MID = 'ITM0004' // Blank field.
+                MTX = 'Unit of Measure'
+            When ( SFWEIGHt = 0 )
+                SetOn IndList( *In44, *In99 )
+                MID = 'ITM0005' // Blank field.
+                MTX = 'Weight'
+        EndSl
+        If( *In99)
+            CallD Pgm( 'YourCompany.YourApplication.MSGLOD'  ) ParmList(#PLMSG)
+        EndIf
+    EndSr
+    //*********************************************************************
+    //  UPDATE THE DATABASE FIELDS
+    //*********************************************************************
+    BegSr UpdDbFlds
+        ZAdd F2(SFitem) Result(ItemNumber)
+        Move SFlngDesc ItemDesc
+        Move SFdesc ItemShrtds
+        ZAdd F2(SFprice) Result(ItemPrice)
+        Move SFunit ItemUnit
+        ZAdd F2(SFweight) Result(ItemWeight)
+        ZAdd F2(SFavail) Result(ItemQtyavl)
+        ZAdd F2(SFonordr) Result(ItemQtyord)
+    EndSr
+    //********************************************************************
+    //   CHECK THE ITEM NUMBER
+    //********************************************************************
+    BegSr ItemChk
+        If( LockRec = 'N' )
+            Chain L1RecFmt Key(ItemNumber) NotFnd(*In80) Access(*NoLock)
+        Else
+            Chain L1RecFmt Key(ItemNumber) NotFnd(*In80)
+        EndIf
+    EndSr
+    //*********************************************************************
+    //  Load Sfl Subroutine
+    //*********************************************************************
+    BegSr LoadSfl
+        SetOff *In61 //Start with green.
+        *In90 = '1' //Clear the subfile.
+        Write SflC
+        SetOff IndList( *In76, *In90 ) //Display records.
+        ZAdd F2(0) Result(SflRRN)
+        Read L2RecFmt Eof(*In77)
+    //----------------------------------------------------------
+        DoWhile ( *Not *In77  /* EOF or full s/f. */ +
+            *And ( SflRRN < 14 ) )
+            ZAdd F2(ITEMNUMBER) Result(SFITEMNUM)
+            MoveL ITEMSHRTDS SFITEMDESC
+            ZAdd F2(ITEMPRICE) Result(SFITMPRIC)
+            MoveL ITEMQTYAVL SFITMAVAIL
+            If( *In61) //Save the color of
+                MoveL 'W' SFCOLOR // the row.
+            Else
+                MoveL 'G' SFCOLOR
+            EndIf
+            ADD F2(1) Result(sflrrn)
+            Write sfl1
+            *In61 = (*Not *In61) //Reverse the colour.
+            Read L2RecFmt Eof(*In77)
+        EndDo
+    // Any records found?
+        If( SflRRN = 0 )
+            ZAdd F2(1) Result(sflrrn)
+            Move *ZEROS SFITEMNUM
+            ZAdd F2(0) Result(ITEMNUMBER)
+            MoveL 'END OF FILE' SFITEMDESC Fill(*Pad)
+            Move *ZEROS SFITMPRIC
+            Move *ZEROS SFITMAVAIL
+            Write sfl1
+        EndIf
+    EndSr
+    //*********************************************************************
+    //  Read Backwards for a PageDown
+    //*********************************************************************
+    BegSr ReadBack
+        SetOff IndList( *In76, *In77 )
+        ZAdd F2(0) Result(X)
+        Chain sfl1 Key(1) //Get the top name and
+        MoveL SFITEMDESC ITEMshrtds // number.
+        ZAdd F2(SFITEMNUM) Result(ITEMNUMBER)
+        Chain L2RecFmt Key(KeyMastL2)
+        ReadP L2RecFmt Bof(*In76)
+        DoWhile ( *Not *In76  /* EOF or full s/f. */ +
+            *And ( X < 14 ) )
+            ADD F2(1) Result(X)
+            ReadP L2RecFmt Bof(*In76)
+        EndDo
+        If( *In76) //Any records found?
+            SetLL L2RecFmt Key(*LoVal)
+        EndIf
+    EndSr
+    //*********************************************************************
+    // CLEAR THE SELECTION NUMBER
+    //*********************************************************************
+    BegSr ClearSel
+        ZAdd F2(0) Result(SFSEL)
+        *In61 = (SFCOLOR = 'W')
+        Update sfl1
+    EndSr
+    //*********************************************************************
+    // CLEAR THE MESSAGE QUEUE
+    //*********************************************************************
+    BegSr ClearMsgs
+        CallD Pgm( 'YourCompany.YourApplication.MSGCLR'  )
+    EndSr
+    //*********************************************************************
+    // Init Subroutine
+    //*********************************************************************
+    BegSr PROCESS_STAR_INZSR
+        SetLL L2RecFmt Key(*Loval)
+        ExSr LoadSfl
+        *In75 = *On
+        MID = *Blank
+        @PGMQ = '*'
+        CallD Pgm( 'YourCompany.YourApplication.MSGCLR'  )
+    // Message handling parm list
+        // PLIST "#PLMSG" moved by Monarch to global scope.
+    EndSr
+    
+    BegSr Reset_#pNbrs
+        #pNbrs = *Zeros
+    EndSr
+ 
+EndClass

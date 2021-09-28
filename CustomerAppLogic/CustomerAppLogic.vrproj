@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>12.0.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>e025506b-42c9-44e8-8447-40915e0975cd</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>YourCompany.YourApplication</RootNamespace>
+    <AssemblyName>SunFarm.CustomerApp</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <CompactDs>True</CompactDs>
+    <Name>CustomerAppLogic</Name>
+    <DisplayFileRoot>..\CustomerAppSite</DisplayFileRoot>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>..\CustomerAppLogic_CS</OutputPath>
+    <NoWarn>5002,5003</NoWarn>
+    <DefineConstants>NOMAD</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <NoWarn>5002,5003</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ASNA.DataGate.Client">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CUSTCALC.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="CUSTDELIV.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="CUSTINQ.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="CUSTPRMPT.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="CUSTPRTS.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="CUSTSBMJOB.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="ITEMINQ.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="MSGCLR.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="MSGLOD.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="MyJob.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="ORDDTLINQ.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="ORDHINQ.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="ORDPRINT.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.vr" />
+    <Compile Include="RUNCI.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="WWSPLF.vr">
+      <SubType>
+      </SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\ASNA\VisualRPG\v11.2\ASNA.VisualRPG.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"C:\Program Files (x86)\ASNA\Nomad\16.0\NomadTranslator.exe" "$(ProjectPath)" /overwrite /out:"$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

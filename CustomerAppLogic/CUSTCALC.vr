@@ -1,0 +1,103 @@
+﻿// ASNA Monarch(R) version 10.0.48.0 at 9/28/2021
+// Migrated source location: library ERCAP, file QRPGSRC, member CUSTCALC
+
+Using SunFarm.CustomerApp_Job
+
+Using System
+Using ASNA.QSys.Runtime
+Using ASNA.QSys.Runtime.JobSupport
+
+BegClass CUSTCALC Extends(Program) Access(*Public) + 
+   Attributes(ActivationGroup('*DFTACTGRP')) + 
+   UsesCycle(*Yes)
+
+    //********************************************************************
+    // JB   8/30/2004   Added option to display billing info.
+
+    //********************************************************************
+    DclDiskFile CUSTOMERL1  Type(*Input) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/CUSTOMERL1") ImpOpen(*No) RnmFmt( RCUSTOMER )
+    DclDiskFile CSMASTERL1  Type(*Input) Org(*Indexed) DB(MyJob.MyDatabase) File("*LIBL/CSMASTERL1") ImpOpen(*No) RnmFmt( RCSMASTL1 )
+    //********************************************************************
+    //  ** ENTRY Parm List **
+
+    DclFld Cust#             Type( *Packed  )    Len( 9,0 )
+    DclFld Sales             Type( *Packed  )    Len( 13,2 )
+    DclFld TempAmt           Type( *Zoned   )    Len( 13,2 )
+    DclFld Returns           Type( *Packed  )    Len( 13,2 )
+    DclFld Cust#Ch           Type( *Char    )    Len( 9   )
+    DclFld SalesCh           Type( *Char    )    Len( 13  )
+    DclFld ReturnsCh         Type( *Char    )    Len( 13  )
+
+    DclFld SaleEvent         Type( *Zoned   )    Len( 1,0 )
+    DclFld ReturnEvent       Type( *Zoned   )    Len( 1,0 )
+
+    DclDs CUSTSL ExtDesc(*Yes) DbDesc(MyJob.MyDatabase) FileDesc("*LIBL/CSMASTER")
+        DclOverlayGroup SlsArray Type( *Packed  )    Len( 11,2 ) Dim( 12 ) StartField( CSSALES01 )
+    
+    //********************************************************************
+/region Constructor and Dispose 
+    BegConstructor Access(*Public)
+        Open CSMASTERL1 DB(CurrentJob.Database)
+        Open CUSTOMERL1 DB(CurrentJob.Database)
+    EndConstructor
+ 
+    BegSr Dispose  Access( *Public ) Modifier(*Overrides)
+        DclSrParm disposing Type(*Boolean)
+        If( disposing )
+            Close *All
+        EndIf
+        *Base.Dispose(Disposing)
+    EndSr
+ 
+ 
+/endregion
+    BegProc *Entry Access(*Public)
+        DclSrParm Cust#Ch           By(*Reference)
+        DclSrParm SalesCh           By(*Reference)
+        DclSrParm ReturnsCh         By(*Reference)
+ 
+ 
+    //*Init $$ Values
+        ZAdd F2(0) Result(Sales)
+        Returns = 0
+
+    // Get Customer Master Record
+
+        Move Cust#Ch Cust#
+        Chain RCUSTOMER Key(Cust#) NotFnd(*In90)
+    //* Position Sales File to Customer
+        If( *Not *In90)
+            SetLL RCSMastL1 Key(Cust#)
+            ReadE From(RCSMastL1) Key(Cust#) Eof(*In03)
+    //*Read Sales Records
+            DoWhile ( *Not *IN03)
+    //*Sales
+                XFoot Arr(SlsArray) Result(TempAmt)
+                If( CSType = SaleEvent )
+                    Sales = Sales + TempAmt
+                EndIf
+    //*Returns
+                If( CSType = ReturnEvent )
+                    Returns = Returns + TempAmt
+                EndIf
+    //*Read Next
+                ReadE From(RCSMastL1) Key(Cust#) Eof(*In03)
+            EndDo
+        EndIf
+        Move Sales SalesCh
+        Move Returns ReturnsCh
+        *INLR = *On
+    ///SPACE 3
+    // * * * * * * * * * * ** *
+    //  Initialize Event Fields
+    // * * * * * * * * * * ** *
+    EndProc
+    BegSr PROCESS_STAR_INZSR
+        SaleEvent = 1
+        ReturnEvent = 2
+        *IN03 = *Off
+        Sales = 0
+        Returns = 0
+    EndSr
+ 
+EndClass

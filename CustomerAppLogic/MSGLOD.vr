@@ -1,0 +1,41 @@
+﻿// ASNA Monarch(R) version 10.0.48.0 at 9/28/2021
+// Migrated source location: library ERCAP, file QCLSRC, member MSGLOD
+
+Using SunFarm.CustomerApp_Job
+
+Using System
+Using System.Collections
+Using System.Collections.Specialized
+Using ASNA.QSys.Runtime
+Using ASNA.QSys.Runtime.JobSupport
+
+
+
+BegClass Msglod Extends(CLProgram) Access(*Public)
+
+    DclFld _MSGID            Type( *Char    )     Len(7)
+    DclFld _MSGTXT           Type( *Char    )     Len(30)
+
+//------------------------------------------------------------------------------ 
+//  "*Entry" Mainline Code (Monarch generated)
+//------------------------------------------------------------------------------ 
+    BegProc *Entry Access( *Public )
+
+        DclSrParm _MSGID            By(*Reference)
+        DclSrParm _MSGTXT           By(*Reference)
+
+        *INLR = *ON
+
+
+        If (_MSGID *NE "       ") 
+            If (%SubST( _MSGID, 1, 3 ) *EQ "CST") 
+                SendProgramMessage (_MSGID, 'CUSTMSGF', _MSGTXT )
+            Else
+                SendProgramMessage (_MSGID, 'ITEMMSGF', _MSGTXT )
+            EndIf
+        EndIf
+
+
+    EndProc
+
+EndClass

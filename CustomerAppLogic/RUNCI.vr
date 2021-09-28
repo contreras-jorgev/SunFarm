@@ -1,0 +1,33 @@
+﻿// ASNA Monarch(R) version 10.0.48.0 at 9/28/2021
+// Migrated source location: library ERCAP, file QCLSRC, member RUNCI
+
+Using SunFarm.CustomerApp_Job
+
+Using System
+Using System.Collections
+Using System.Collections.Specialized
+Using ASNA.QSys.Runtime
+Using ASNA.QSys.Runtime.JobSupport
+
+
+
+BegClass Runci Extends(CLProgram) Access(*Public)
+
+
+//------------------------------------------------------------------------------ 
+//  "*Entry" Mainline Code (Monarch generated)
+//------------------------------------------------------------------------------ 
+    BegProc *Entry Access( *Public )
+
+        *INLR = *ON
+        AddMsgToIgnore(*typeof(CPF2103Exception)) /* LIBRARY SO_AND_SO ALREADY IN LIBL */
+// TODO : Warning: Please review commands that do not start with "Try" (.Net does not support Exception Catch/Ignore and Continue)
+        
+
+        TryAddLibLEntry('ERCAP')
+        CallD Pgm( 'YourCompany.YourApplication.CUSTINQ'  )
+
+
+    EndProc
+
+EndClass
