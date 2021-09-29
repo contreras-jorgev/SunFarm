@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- Message File ERCAP/ITEMMSGF ASNA Monarch(R) version 10.0.48.0 at 9/28/2021 -->
+<!-- Message File ERCAP/ITEMMSGF ASNA Monarch(R) version 10.0.48.0 at 9/29/2021 -->
 <LegacyMsgFileContents version="1.0">
 <messages>
 <MSG MSGID="ITM0001" SEVERITY="0" DATACOUNT="1" TEXT="Item &amp;1 has been added" SECLVL="" TYPE1="*CHAR" LEN1="9" DEC1="0"                                                                             />
