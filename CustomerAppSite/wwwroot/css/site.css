@@ -37,3 +37,12 @@
 .left-aligned-field {
     text-align: left;
 }
+
+#customer-icon {
+    position: relative;
+    width: 109px;
+    border-color: gray;
+    border-width: thin;
+    border-style: solid;
+    background-color: white;
+}

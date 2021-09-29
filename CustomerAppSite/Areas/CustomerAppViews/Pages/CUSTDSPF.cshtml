@@ -50,6 +50,11 @@
                     <DdsDecField class="left-aligned-field" Col="20" For="CUSTREC.SFCUSTNO" Color="DarkBlue" EditCode="Z" Comment="CUSTOMER NUMBER" />
                     @*<DdsCharField Col="35+5" For="CUSTREC.SFOLDNAME" Upper=true Color="DarkBlue" />*@
                 </div>
+
+                <div Row="3">
+                    <img id="customer-icon" Col="8" src="~/customer-icon.svg" />
+                </div>
+                
                 <div Row="4">
                     <DdsConstant Col="20" Text="Name" />
                     <DdsCharField Col="27" ColSpan="25" LimitMaxLength=true For="CUSTREC.SFNAME" VirtualRowCol="7,27" PositionCursor="40" tabIndex=2 />
