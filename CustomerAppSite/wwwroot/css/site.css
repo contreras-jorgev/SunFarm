@@ -38,11 +38,14 @@
     text-align: left;
 }
 
+:root { /* Define a new global CSS variable*/
+    --customer-image-size: 110px;
+}
+
 #customer-icon {
-    position: relative;
-    margin-top: -109px;
-    transform: translateY(109px);
-    width: 109px;
+    margin-top: calc(var(--customer-image-size) * -1 );
+    transform: translateY(var(--customer-image-size));
+    width: calc(var(--customer-image-size) * 1);
     border-color: gray;
     border-width: thin;
     border-style: solid;
