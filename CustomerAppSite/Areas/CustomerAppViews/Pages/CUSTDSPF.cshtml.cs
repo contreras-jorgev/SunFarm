@@ -37,7 +37,7 @@ namespace YourCompany.YourApplication.CustomerAppViews
                 FunctionKeys = "F9 09;PageUp 51:!76;PageDown 50:!77",
                 DisplayFields = "!90",
                 DisplayRecords = "!90",
-                Size = 14,
+                Size = 20, // Was 14 originally.
                 IsExpandable = false,
                 EraseFormats = "CUSTREC SALESREC"
             )

@@ -16,6 +16,8 @@ namespace SunFarm.CustomerApp
     [ProgramEntry("_ENTRY")]
     public partial class CUSTINQ : Program
     {
+        const int SFLC_SubfilePage = 20;
+
         protected dynamic DynamicCaller_;
 
         //********************************************************************
@@ -526,7 +528,7 @@ namespace SunFarm.CustomerApp
             sflrrn = 0;
             _IN[77] = CUSTOMERL2.ReadNext(true) ? '0' : '1';
             //----------------------------------------------------------
-            while (!(bool)_IN[77] && (sflrrn < 14))
+            while (!(bool)_IN[77] && (sflrrn < SFLC_SubfilePage))
             {
                 SFCUSTNO = (decimal)CMCUSTNO;
                 SFNAME1 = CMNAME;
@@ -565,7 +567,7 @@ namespace SunFarm.CustomerApp
             CMCUSTNO = (decimal)SFCUSTNO;
             CUSTOMERL2.Chain(true, CMNAME, CMCUSTNO);
             _IN[76] = CUSTOMERL2.ReadPrevious(true) ? '0' : '1';
-            while (!(bool)_IN[76] && (X < 14))
+            while (!(bool)_IN[76] && (X < SFLC_SubfilePage))
             {
                 /* EOF or full s/f. */
                 X += 1;
