@@ -42,72 +42,52 @@
                     }
                 </div>
             </DdsSubfileControl>
-            <DdsRecord For="CUSTREC" KeyNames="ENTER 'Enter'; F4 'Prompt'; F6 'New'; F11 'Delete'; F12 'Cancel';">
-                <div Row="1">
-                    <DdsConstant Col="2" Text=@System.Environment.UserName />
-                    <DdsConstant Col="29+5" Text="M5 Customer Maintenance" Color="DarkBlue" />
-                    <DdsConstant Col="64+5" Text=@DateTime.Today.ToString(@"MM\/dd\/yy") />
-                    <DdsConstant Col="73+5" Text=@DateTime.Now.ToString("HH:mm:ss") />
-                </div>
+            <DdsRecord For="CUSTREC" StretchConstantText=false KeyNames="ENTER 'Submit'; F3 'Exit'; F4 'Prompt'; F6 'New Customer'; F11 'Remove Customer'; F12 '◀ Back';">
+                <div id="page-title">Customer Maintenance</div>
+
                 <div Row="2">
-                    <DdsCharField Col="2" For="CUSTREC.SCPGM" Upper=true />
+                    <DdsConstant Col="8" Text="Account number" />
+                    <DdsDecField class="left-aligned-field" Col="20" For="CUSTREC.SFCUSTNO" Color="DarkBlue" EditCode="Z" Comment="CUSTOMER NUMBER" />
+                    @*<DdsCharField Col="35+5" For="CUSTREC.SFOLDNAME" Upper=true Color="DarkBlue" />*@
+                </div>
+                <div Row="4">
+                    <DdsConstant Col="20" Text="Name" />
+                    <DdsCharField Col="27" ColSpan="25" LimitMaxLength=true For="CUSTREC.SFNAME" VirtualRowCol="7,27" PositionCursor="40" tabIndex=2 />
                 </div>
                 <div Row="5">
-                    <DdsDecField Col="27" For="CUSTREC.SFCUSTNO" Color="DarkBlue" EditCode="Z" Comment="CUSTOMER NUMBER" />
-                    <DdsCharField Col="35+5" For="CUSTREC.SFOLDNAME" Upper=true Color="DarkBlue" />
+                    <DdsConstant Col="20" Text="Address" />
+                    <DdsCharField Col="27" ColSpan="25" LimitMaxLength=true For="CUSTREC.SFADDR1" VirtualRowCol="8,27" PositionCursor="41" tabIndex=3 />
+                </div>
+                <div Row="6">
+                    <DdsCharField Col="27" ColSpan="25" LimitMaxLength=true For="CUSTREC.SFADDR2" VirtualRowCol="9,27" tabIndex=4 />
                 </div>
                 <div Row="7">
-                    <DdsConstant Col="20" Text="Name:" />
-                    <DdsCharField Col="27" For="CUSTREC.SFNAME" VirtualRowCol="7,27" PositionCursor="40" tabIndex=2 />
+                    <DdsConstant Col="20" Text="City" />
+                    <DdsCharField Col="27" ColSpan="10" LimitMaxLength=true For="CUSTREC.SFCITY" VirtualRowCol="10,27" PositionCursor="42" tabIndex=5 />
+                    <DdsCharField Col="10+1+27" For="CUSTREC.SFSTATE" Upper=true VirtualRowCol="11,27" PositionCursor="43" tabIndex=6 />
+                    <DdsCharField Col="10+1+2+2+27" For="CUSTREC.SFPOSTCODE" Upper=true VirtualRowCol="11,37" tabIndex=7 />
                 </div>
-                <div Row="8">
-                    <DdsConstant Col="17" Text="Address:" />
-                    <DdsCharField Col="27" For="CUSTREC.SFADDR1" VirtualRowCol="8,27" PositionCursor="41" tabIndex=3 />
-                </div>
-                <div Row="9">
-                    <DdsCharField Col="27" For="CUSTREC.SFADDR2" VirtualRowCol="9,27" tabIndex=4 />
-                </div>
-                <div Row="10">
-                    <DdsConstant Col="20" Text="City:" />
-                    <DdsCharField Col="27" For="CUSTREC.SFCITY" VirtualRowCol="10,27" PositionCursor="42" tabIndex=5 />
-                </div>
-                <div Row="11">
-                    <DdsConstant Col="15" Text="State/Zip:" />
-                    <DdsCharField Col="27" For="CUSTREC.SFSTATE" Upper=true VirtualRowCol="11,27" PositionCursor="43" tabIndex=6 />
-                    <DdsConstant Col="30+5" Text="(F4)" Color="Blue" />
-                    <DdsCharField Col="37+5" For="CUSTREC.SFPOSTCODE" Upper=true VirtualRowCol="11,37" tabIndex=7 />
-                </div>
-                <div Row="13">
-                    <DdsConstant Col="21" Text="Fax:" />
-                    <DdsDecField Col="27" For="CUSTREC.SFFAX" VirtualRowCol="13,27" EditWord="(   )   -    " tabIndex=8 />
-                </div>
-                <div Row="14">
-                    <DdsConstant Col="19" Text="Phone:" />
-                    <DdsCharField Col="27" For="CUSTREC.SFPHONE" Upper=true VirtualRowCol="14,27" tabIndex=9 />
-                </div>
-                <div Row="15">
-                    <DdsConstant Col="18" Text="Status:" />
+                @*<div Row="8">
+                    <DdsConstant Col="10" Text="Status" />
                     <DdsCharField Col="27" For="CUSTREC.SFSTATUS" Upper=true VirtualRowCol="15,27" PositionCursor="44" tabIndex=10 />
                     <DdsConstant Col="30+5" Text="(F4)" Color="Blue" />
+                </div>*@
+                <div Row="8">
+                    <DdsConstant Col="10" Text="Contact Name" />
+                    <DdsCharField Col="20" For="CUSTREC.SFCONTACT" Upper=true VirtualRowCol="16,27" tabIndex=11 />
                 </div>
-                <div Row="16">
-                    <DdsConstant Col="12" Text="Contact Name:" />
-                    <DdsCharField Col="27" For="CUSTREC.SFCONTACT" Upper=true VirtualRowCol="16,27" tabIndex=11 />
+                <div Row="9">
+                    <DdsConstant Col="10" Text="Contact eMail" />
+                    <DdsCharField Col="20" For="CUSTREC.SFCONEMAL" Upper=true VirtualRowCol="17,27" tabIndex=12 />
                 </div>
-                <div Row="17">
-                    <DdsConstant Col="11" Text="Contact eMail:" />
-                    <DdsCharField Col="27" For="CUSTREC.SFCONEMAL" Upper=true VirtualRowCol="17,27" tabIndex=12 />
-                </div>
-                <div Row="18">
-                    <DdsConstant Col="7" Text="Send Confirmation:" />
-                    <DdsCharField Col="27" For="CUSTREC.SFYN01" Upper=true VirtualRowCol="18,27" tabIndex=13 />
-                    <DdsConstant Col="29+5" Text="(Y/N)" />
-                </div>
-                <div Row="23">
-                    <DdsConstant Col="3" Text="F4=Prompt" Color="Blue" />
-                    <DdsConstant Col="15" Text="F6=New customer" VisibleCondition="!30" Color="Blue" />
-                    <DdsConstant Col="33+5" Text="F11=Remove customer" VisibleCondition="!30" Color="Blue" />
-                    <DdsConstant Col="55+5" Text="F12=Cancel" Color="Blue" />
+                <div Row="10">
+                    <DdsConstant Col="10" Text="Phone" />
+                    <DdsCharField Col="20" ColSpan="10" LimitMaxLength=true class="left-aligned-field" For="CUSTREC.SFPHONE" Upper=true VirtualRowCol="14,27" tabIndex=9 />
+                    <DdsConstant Col="33" Text="Fax" />
+                    <DdsDecField Col="36" For="CUSTREC.SFFAX" class="left-aligned-field" VirtualRowCol="13,27" EditWord="(   )   -    " tabIndex=8 />
+                    <DdsConstant Col="47" Text="Send Confirmation" />
+                    <DdsCharField Col="58" For="CUSTREC.SFYN01" Upper=true VirtualRowCol="18,27" tabIndex=13 />
+                    <DdsConstant Col="61" Text="(Y/N)" />
                 </div>
             </DdsRecord>
             <DdsRecord For="SALESREC" KeyNames="ENTER 'Enter'; F12 'Cancel';">
