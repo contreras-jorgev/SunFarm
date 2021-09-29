@@ -10,7 +10,7 @@ using System;
 using ASNA.QSys.Runtime.JobSupport;
 
 
-namespace YourCompany.YourApplication
+namespace SunFarm.CustomerApp
 {
     [ActivationGroup("*DFTACTGRP")]
     [ProgramEntry("_ENTRY")]
@@ -248,7 +248,7 @@ namespace YourCompany.YourApplication
                     // Delete msg
                     MID = "ITM0003";
                     MTX = ITEMNUMBER.MoveRight(MTX);
-                    DynamicCaller_.CallD("YourCompany.YourApplication.MSGLOD", out _LR, ref MID, ref MTX);
+                    DynamicCaller_.CallD("SunFarm.CustomerApp.MSGLOD", out _LR, ref MID, ref MTX);
                     break;
                     // Add/update on the Enter key
                 }
@@ -267,7 +267,7 @@ namespace YourCompany.YourApplication
                         // Added message
                         MID = "ITM0001";
                         MTX = SFITEM.MoveRight(MTX);
-                        DynamicCaller_.CallD("YourCompany.YourApplication.MSGLOD", out _LR, ref MID, ref MTX);
+                        DynamicCaller_.CallD("SunFarm.CustomerApp.MSGLOD", out _LR, ref MID, ref MTX);
                         break;
                         // Update the database
                     }
@@ -290,7 +290,7 @@ namespace YourCompany.YourApplication
                         // Updated message
                         MID = "ITM0002";
                         MTX = ITEMNUMBER.MoveLeft(MTX);
-                        DynamicCaller_.CallD("YourCompany.YourApplication.MSGLOD", out _LR, ref MID, ref MTX);
+                        DynamicCaller_.CallD("SunFarm.CustomerApp.MSGLOD", out _LR, ref MID, ref MTX);
                     }
                     // Re-open for the next update
                     LockRec = "N";
@@ -347,7 +347,7 @@ namespace YourCompany.YourApplication
             }
             if ((bool)_IN[99])
             {
-                DynamicCaller_.CallD("YourCompany.YourApplication.MSGLOD", out _LR, ref MID, ref MTX);
+                DynamicCaller_.CallD("SunFarm.CustomerApp.MSGLOD", out _LR, ref MID, ref MTX);
             }
         }
         //*********************************************************************
@@ -453,7 +453,7 @@ namespace YourCompany.YourApplication
         void ClearMsgs()
         {
             Indicator _LR = '0';
-            DynamicCaller_.CallD("YourCompany.YourApplication.MSGCLR", out _LR);
+            DynamicCaller_.CallD("SunFarm.CustomerApp.MSGCLR", out _LR);
         }
         //*********************************************************************
         // Init Subroutine
@@ -466,7 +466,7 @@ namespace YourCompany.YourApplication
             _IN[75] = '1';
             MID = "";
             aPGMQ = "*";
-            DynamicCaller_.CallD("YourCompany.YourApplication.MSGCLR", out _LR);
+            DynamicCaller_.CallD("SunFarm.CustomerApp.MSGCLR", out _LR);
         }
 
         // Message handling parm list

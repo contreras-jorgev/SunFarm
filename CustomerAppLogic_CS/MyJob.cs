@@ -3,7 +3,7 @@
 using ASNA.QSys.Runtime;
 using ASNA.DataGate.Common;
 using System;
-using YourCompany.YourApplication;
+using SunFarm.CustomerApp;
 using ASNA.QSys.Runtime.JobSupport;
 namespace SunFarm.CustomerApp_Job
 {
@@ -63,7 +63,7 @@ namespace SunFarm.CustomerApp_Job
             MyDatabase.Open();
             MyPrinterDB.Open();
 
-            DynamicCaller_.CallD("YourCompany.YourApplication.Runci", out _LR);
+            DynamicCaller_.CallD("SunFarm.CustomerApp.Runci", out _LR);
         }
 
 

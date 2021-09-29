@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace YourCompany.YourApplication
+namespace SunFarm.CustomerApp
 {
     
     public partial class CUSTDELIV

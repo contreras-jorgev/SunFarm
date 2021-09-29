@@ -10,7 +10,7 @@ using System;
 using ASNA.QSys.Runtime.JobSupport;
 
 
-namespace YourCompany.YourApplication
+namespace SunFarm.CustomerApp
 {
     [ActivationGroup("*DFTACTGRP")]
     [ProgramEntry("_ENTRY")]

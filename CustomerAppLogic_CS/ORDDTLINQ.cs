@@ -10,7 +10,7 @@ using System;
 using ASNA.QSys.Runtime.JobSupport;
 
 
-namespace YourCompany.YourApplication
+namespace SunFarm.CustomerApp
 {
     [ActivationGroup("*DFTACTGRP")]
     [ProgramEntry("_ENTRY")]
@@ -177,7 +177,7 @@ namespace YourCompany.YourApplication
                 {
                     pSelOnly = "Y";
                     // Prompting?
-                    DynamicCaller_.CallD("YourCompany.YourApplication.ITEMINQ", out _LR, ref pSelOnly, ref pItmNbr);
+                    DynamicCaller_.CallD("SunFarm.CustomerApp.ITEMINQ", out _LR, ref pSelOnly, ref pItmNbr);
                     SITMNBR = pItmNbr;
                     _IN[90] = '0'; // This fmt must be
                     ORDDTLINQD.Write("SFLC", _IN.Array); //  redisplayed again

@@ -10,7 +10,7 @@ using System;
 using ASNA.QSys.Runtime.JobSupport;
 
 
-namespace YourCompany.YourApplication
+namespace SunFarm.CustomerApp
 {
     [ActivationGroup("*DFTACTGRP")]
     [ProgramEntry("_ENTRY")]
@@ -150,7 +150,7 @@ namespace YourCompany.YourApplication
                     else if ((bool)_IN[9])
                     {
                         // Work with spooled files
-                        DynamicCaller_.CallD("YourCompany.YourApplication.WWSPLF", out _LR);
+                        DynamicCaller_.CallD("SunFarm.CustomerApp.WWSPLF", out _LR);
                     }
                     else if (!SETNAME.IsBlanks())
                     {
@@ -197,11 +197,11 @@ namespace YourCompany.YourApplication
                                 {
                                     SVCUSTNO = (decimal)SFCUSTNO;
                                     _SVCUSTNOaProxy = SVCUSTNOa;
-                                    DynamicCaller_.CallD("YourCompany.YourApplication.CUSTPRTS", out _IN.Array[88], ref _SVCUSTNOaProxy);
+                                    DynamicCaller_.CallD("SunFarm.CustomerApp.CUSTPRTS", out _IN.Array[88], ref _SVCUSTNOaProxy);
                                     SVCUSTNOa = _SVCUSTNOaProxy;
                                     MID = "CST0006";
                                     MTX = " ";
-                                    DynamicCaller_.CallD("YourCompany.YourApplication.MSGLOD", out _LR, ref MID, ref MTX);
+                                    DynamicCaller_.CallD("SunFarm.CustomerApp.MSGLOD", out _LR, ref MID, ref MTX);
                                     ClearSel();
                                 }
                                 else if (SFSEL == 7)
@@ -218,7 +218,7 @@ namespace YourCompany.YourApplication
                                     // Display delivery
                                     CUSTDSPF.ChainByRRN("SFL1", (int)sflrrn, _IN.Array); //  addresses.
                                     pNumber = (decimal)SFCUSTNO;
-                                    DynamicCaller_.CallD("YourCompany.YourApplication.CUSTDELIV", out _IN.Array[88], ref pNumber);
+                                    DynamicCaller_.CallD("SunFarm.CustomerApp.CUSTDELIV", out _IN.Array[88], ref pNumber);
                                     ClearSel();
                                 }
                                 else if (SFSEL == 3)
@@ -232,7 +232,7 @@ namespace YourCompany.YourApplication
                                     // Maintainance.
                                     CUSTDSPF.ChainByRRN("SFL1", (int)sflrrn, _IN.Array);
                                     ORDCUST = (decimal)SFCUSTNO;
-                                    DynamicCaller_.CallD("YourCompany.YourApplication.ORDHINQ", out _LR, ref ORDCUST);
+                                    DynamicCaller_.CallD("SunFarm.CustomerApp.ORDHINQ", out _LR, ref ORDCUST);
                                     ClearSel();
                                 }
                                 else if (SFSEL == 2)
@@ -246,10 +246,10 @@ namespace YourCompany.YourApplication
                         if (hpNbrs > 0)
                         {
                             //Are there any jobs
-                            DynamicCaller_.CallD("YourCompany.YourApplication.CUSTSBMJOB", out _IN.Array[88], ref pNumbers, ref pTypes); // to submit to batch?
+                            DynamicCaller_.CallD("SunFarm.CustomerApp.CUSTSBMJOB", out _IN.Array[88], ref pNumbers, ref pTypes); // to submit to batch?
                             MID = "CST0005";
                             MTX = (string)hpNbrsAlf;
-                            DynamicCaller_.CallD("YourCompany.YourApplication.MSGLOD", out _LR, ref MID, ref MTX);
+                            DynamicCaller_.CallD("SunFarm.CustomerApp.MSGLOD", out _LR, ref MID, ref MTX);
                         }
                         sflrrn = savrrn;
                     }
@@ -313,7 +313,7 @@ namespace YourCompany.YourApplication
                 {
                     if (CSRFLD == "SFSTATE" || (CSRFLD == "SFSTATUS"))
                     {
-                        DynamicCaller_.CallD("YourCompany.YourApplication.CUSTPRMPT", out _IN.Array[88], ref CSRFLD, ref pResult);
+                        DynamicCaller_.CallD("SunFarm.CustomerApp.CUSTPRMPT", out _IN.Array[88], ref CSRFLD, ref pResult);
                         if (!pResult.IsBlanks())
                         {
                             if (CSRFLD == "SFSTATE")
@@ -326,7 +326,7 @@ namespace YourCompany.YourApplication
                     {
                         MID = "CST0004";
                         MTX = " ";
-                        DynamicCaller_.CallD("YourCompany.YourApplication.MSGLOD", out _LR, ref MID, ref MTX);
+                        DynamicCaller_.CallD("SunFarm.CustomerApp.MSGLOD", out _LR, ref MID, ref MTX);
                         _IN[4] = '0';
                     }
                 }
@@ -371,7 +371,7 @@ namespace YourCompany.YourApplication
                     // Delete msg
                     MID = "CST0003";
                     MTX = CMCUSTNO.MoveRight(MTX);
-                    DynamicCaller_.CallD("YourCompany.YourApplication.MSGLOD", out _LR, ref MID, ref MTX);
+                    DynamicCaller_.CallD("SunFarm.CustomerApp.MSGLOD", out _LR, ref MID, ref MTX);
                     break;
                     // Add/update on the Enter key
                 }
@@ -388,7 +388,7 @@ namespace YourCompany.YourApplication
                         // Added message
                         MID = "CST0001";
                         MTX = CMCUSTNO.MoveRight(MTX);
-                        DynamicCaller_.CallD("YourCompany.YourApplication.MSGLOD", out _LR, ref MID, ref MTX);
+                        DynamicCaller_.CallD("SunFarm.CustomerApp.MSGLOD", out _LR, ref MID, ref MTX);
                         break;
                         // Update the database
                     }
@@ -409,7 +409,7 @@ namespace YourCompany.YourApplication
                         // Updated message
                         MID = "CST0002";
                         MTX = CMCUSTNO.MoveLeft(MTX);
-                        DynamicCaller_.CallD("YourCompany.YourApplication.MSGLOD", out _LR, ref MID, ref MTX);
+                        DynamicCaller_.CallD("SunFarm.CustomerApp.MSGLOD", out _LR, ref MID, ref MTX);
                     }
                     // Re-open for the next update
                     LockRec = "N";
@@ -466,7 +466,7 @@ namespace YourCompany.YourApplication
             }
             if ((bool)_IN[99])
             {
-                DynamicCaller_.CallD("YourCompany.YourApplication.MSGLOD", out _LR, ref MID, ref MTX);
+                DynamicCaller_.CallD("SunFarm.CustomerApp.MSGLOD", out _LR, ref MID, ref MTX);
             }
         }
         //*********************************************************************
@@ -503,7 +503,7 @@ namespace YourCompany.YourApplication
             CmCusthCH = CMCUSTNO.MoveRight(CmCusthCH);
             SalesCh = new string('0', 13);
             ReturnsCh = new string('0', 13);
-            DynamicCaller_.CallD("YourCompany.YourApplication.CUSTCALC", out _IN.Array[88], ref CmCusthCH, ref SalesCh, ref ReturnsCh);
+            DynamicCaller_.CallD("SunFarm.CustomerApp.CUSTCALC", out _IN.Array[88], ref CmCusthCH, ref SalesCh, ref ReturnsCh);
             SFNAME = CMNAME;
             SFSALES = SalesCh.ToZonedDecimal(13, 2);
             SFRETURNS = ReturnsCh.ToZonedDecimal(13, 2);
@@ -597,7 +597,7 @@ namespace YourCompany.YourApplication
         void ClearMsgs()
         {
             Indicator _LR = '0';
-            DynamicCaller_.CallD("YourCompany.YourApplication.MSGCLR", out _LR);
+            DynamicCaller_.CallD("SunFarm.CustomerApp.MSGCLR", out _LR);
             MID = "";
         }
         //*********************************************************************
@@ -611,7 +611,7 @@ namespace YourCompany.YourApplication
             _IN[75] = '1';
             MID = "";
             aPGMQ = "*";
-            DynamicCaller_.CallD("YourCompany.YourApplication.MSGCLR", out _LR);
+            DynamicCaller_.CallD("SunFarm.CustomerApp.MSGCLR", out _LR);
         }
 #region CopyBook ".\Copybooks\ErcapCustchk.vr"
         // ASNA Monarch(R) version 10.0.48.0 at 9/28/2021

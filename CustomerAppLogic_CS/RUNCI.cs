@@ -14,7 +14,7 @@ using ASNA.QSys.Runtime.JobSupport;
 
 
 
-namespace YourCompany.YourApplication
+namespace SunFarm.CustomerApp
 {
     [ProgramEntry("_ENTRY")]
     public partial class Runci : CLProgram
@@ -34,7 +34,7 @@ namespace YourCompany.YourApplication
 
 
             TryAddLibLEntry("ERCAP");
-            DynamicCaller_.CallD("YourCompany.YourApplication.CUSTINQ", out _LR);
+            DynamicCaller_.CallD("SunFarm.CustomerApp.CUSTINQ", out _LR);
         }
 
 #region Entry and activation methods for *ENTRY

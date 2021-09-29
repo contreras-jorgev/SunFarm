@@ -14,7 +14,7 @@ using ASNA.QSys.Runtime.JobSupport;
 
 
 
-namespace YourCompany.YourApplication
+namespace SunFarm.CustomerApp
 {
     [ProgramEntry("_ENTRY")]
     public partial class Wwsplf : CLProgram

@@ -10,7 +10,7 @@ using System;
 using ASNA.QSys.Runtime.JobSupport;
 
 
-namespace YourCompany.YourApplication
+namespace SunFarm.CustomerApp
 {
 #warning Field name CUSTDELIV renamed to avoid a clash with the class name.
     [ActivationGroup("*DFTACTGRP")]
