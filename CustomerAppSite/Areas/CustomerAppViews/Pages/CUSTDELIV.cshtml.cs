@@ -8,7 +8,7 @@ using ASNA.QSys.Expo.Model;
 // Legacy location: library ERCAP, file QDDSSRC, member CUSTDELIV
 
 
-namespace YourCompany.YourApplication.CustomerAppViews
+namespace SunFarm.CustomerApp.CustomerAppViews
 {
     [
         BindProperties,
