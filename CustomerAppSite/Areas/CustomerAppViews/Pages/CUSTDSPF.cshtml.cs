@@ -137,6 +137,42 @@ namespace SunFarm.CustomerApp.CustomerAppViews
             [Char(1)]
             public string SFYN01 { get; set; }
 
+            [Dec(11, 2)]
+            public decimal CSSALES01 { get; private set; }
+
+            [Dec(11, 2)]
+            public decimal CSSALES02 { get; private set; }
+
+            [Dec(11, 2)]
+            public decimal CSSALES03 { get; private set; }
+
+            [Dec(11, 2)]
+            public decimal CSSALES04 { get; private set; }
+
+            [Dec(11, 2)]
+            public decimal CSSALES05 { get; private set; }
+
+            [Dec(11, 2)]
+            public decimal CSSALES06 { get; private set; }
+
+            [Dec(11, 2)]
+            public decimal CSSALES07 { get; private set; }
+
+            [Dec(11, 2)]
+            public decimal CSSALES08 { get; private set; }
+
+            [Dec(11, 2)]
+            public decimal CSSALES09 { get; private set; }
+
+            [Dec(11, 2)]
+            public decimal CSSALES10 { get; private set; }
+
+            [Dec(11, 2)]
+            public decimal CSSALES11 { get; private set; }
+
+            [Dec(11, 2)]
+            public decimal CSSALES12 { get; private set; }
+
         }
 
         [

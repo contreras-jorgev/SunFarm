@@ -297,6 +297,9 @@ namespace SunFarm.CustomerApp
             do
             {
                 CUSTDSPF.Write("MSGSFC", _IN.Array);
+
+                LoadLastSalesAndReturns();
+
                 CUSTDSPF.ExFmt("CUSTREC", _IN.Array);
                 _IN[40] = '0';
                 _IN[41] = '0';
@@ -607,6 +610,20 @@ namespace SunFarm.CustomerApp
             DynamicCaller_.CallD("SunFarm.CustomerApp.MSGCLR", out _LR);
             MID = "";
         }
+
+
+        private void LoadLastSalesAndReturns()
+        {
+            CSSALES01 = CSSALES02 = CSSALES03 = CSSALES04 = CSSALES05 = CSSALES06 = 0;
+            CSSALES07 = CSSALES08 = CSSALES09 = CSSALES10 = CSSALES11 = CSSALES12 = 0;
+
+            FixedDecimal<_9, _0> CustomerNumber = new FixedDecimal<_9, _0>();
+
+            CustomerNumber = CMCUSTNO.MoveRight(CustomerNumber);
+            if (CSMASTERL1.Seek(SeekMode.SetLL, CustomerNumber))
+                CSMASTERL1.ReadNextEqual(false, CustomerNumber);
+        }
+
         //*********************************************************************
         //     * Init Subroutine
         //*********************************************************************
@@ -712,6 +729,7 @@ namespace SunFarm.CustomerApp
             CSMASTERL1 = new DatabaseFile(PopulateBufferCSMASTERL1, PopulateFieldsCSMASTERL1, null, "CSMASTERL1", "*LIBL/CSMASTERL1", CSMASTERL1FormatIDs)
             { IsDefaultRFN = true };
             CUSTDS = buildDSCUSTDS();
+            CUSTSL = buildDSCUSTSL();
         }
     }
 

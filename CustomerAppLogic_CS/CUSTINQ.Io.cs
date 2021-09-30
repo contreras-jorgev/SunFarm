@@ -42,6 +42,18 @@ namespace SunFarm.CustomerApp
         private FixedString<_40> SFCONTACT;
         private FixedString<_40> SFCONEMAL;
         private FixedString<_1> SFYN01;
+        private FixedDecimal<_11, _2> CSSALES01;
+        private FixedDecimal<_11, _2> CSSALES02;
+        private FixedDecimal<_11, _2> CSSALES03;
+        private FixedDecimal<_11, _2> CSSALES04;
+        private FixedDecimal<_11, _2> CSSALES05;
+        private FixedDecimal<_11, _2> CSSALES06;
+        private FixedDecimal<_11, _2> CSSALES07;
+        private FixedDecimal<_11, _2> CSSALES08;
+        private FixedDecimal<_11, _2> CSSALES09;
+        private FixedDecimal<_11, _2> CSSALES10;
+        private FixedDecimal<_11, _2> CSSALES11;
+        private FixedDecimal<_11, _2> CSSALES12;
         private FixedDecimal<_13, _2> SFSALES;
         private FixedDecimal<_13, _2> SFRETURNS;
         private FixedString<_10> aPGMQ;
@@ -300,138 +312,7 @@ namespace SunFarm.CustomerApp
                 this.CUSTSL.SetZoned(value, 9, 1, 0);
             }
         }
-        private FixedDecimal<_11, _2> CSSALES01
-        {
-            get
-            {
-                return this.CUSTSL.GetPacked(10, 11, 2);
-            }
-            set
-            {
-                this.CUSTSL.SetPacked(value, 10, 11, 2);
-            }
-        }
-        private FixedDecimal<_11, _2> CSSALES02
-        {
-            get
-            {
-                return this.CUSTSL.GetPacked(16, 11, 2);
-            }
-            set
-            {
-                this.CUSTSL.SetPacked(value, 16, 11, 2);
-            }
-        }
-        private FixedDecimal<_11, _2> CSSALES03
-        {
-            get
-            {
-                return this.CUSTSL.GetPacked(22, 11, 2);
-            }
-            set
-            {
-                this.CUSTSL.SetPacked(value, 22, 11, 2);
-            }
-        }
-        private FixedDecimal<_11, _2> CSSALES04
-        {
-            get
-            {
-                return this.CUSTSL.GetPacked(28, 11, 2);
-            }
-            set
-            {
-                this.CUSTSL.SetPacked(value, 28, 11, 2);
-            }
-        }
-        private FixedDecimal<_11, _2> CSSALES05
-        {
-            get
-            {
-                return this.CUSTSL.GetPacked(34, 11, 2);
-            }
-            set
-            {
-                this.CUSTSL.SetPacked(value, 34, 11, 2);
-            }
-        }
-        private FixedDecimal<_11, _2> CSSALES06
-        {
-            get
-            {
-                return this.CUSTSL.GetPacked(40, 11, 2);
-            }
-            set
-            {
-                this.CUSTSL.SetPacked(value, 40, 11, 2);
-            }
-        }
-        private FixedDecimal<_11, _2> CSSALES07
-        {
-            get
-            {
-                return this.CUSTSL.GetPacked(46, 11, 2);
-            }
-            set
-            {
-                this.CUSTSL.SetPacked(value, 46, 11, 2);
-            }
-        }
-        private FixedDecimal<_11, _2> CSSALES08
-        {
-            get
-            {
-                return this.CUSTSL.GetPacked(52, 11, 2);
-            }
-            set
-            {
-                this.CUSTSL.SetPacked(value, 52, 11, 2);
-            }
-        }
-        private FixedDecimal<_11, _2> CSSALES09
-        {
-            get
-            {
-                return this.CUSTSL.GetPacked(58, 11, 2);
-            }
-            set
-            {
-                this.CUSTSL.SetPacked(value, 58, 11, 2);
-            }
-        }
-        private FixedDecimal<_11, _2> CSSALES10
-        {
-            get
-            {
-                return this.CUSTSL.GetPacked(64, 11, 2);
-            }
-            set
-            {
-                this.CUSTSL.SetPacked(value, 64, 11, 2);
-            }
-        }
-        private FixedDecimal<_11, _2> CSSALES11
-        {
-            get
-            {
-                return this.CUSTSL.GetPacked(70, 11, 2);
-            }
-            set
-            {
-                this.CUSTSL.SetPacked(value, 70, 11, 2);
-            }
-        }
-        private FixedDecimal<_11, _2> CSSALES12
-        {
-            get
-            {
-                return this.CUSTSL.GetPacked(76, 11, 2);
-            }
-            set
-            {
-                this.CUSTSL.SetPacked(value, 76, 11, 2);
-            }
-        }
+
         private void PopulateBufferCUSTDSPFSFLC(AdgDataSet _dataSet)
         {
         }
@@ -482,6 +363,18 @@ namespace SunFarm.CustomerApp
             _row["SFCONTACT"] = ((string)(SFCONTACT));
             _row["SFCONEMAL"] = ((string)(SFCONEMAL));
             _row["SFYN01"] = ((string)(SFYN01));
+            _row["CSSALES01"] = ((decimal)(CSSALES01));
+            _row["CSSALES02"] = ((decimal)(CSSALES02));
+            _row["CSSALES03"] = ((decimal)(CSSALES03));
+            _row["CSSALES04"] = ((decimal)(CSSALES04));
+            _row["CSSALES05"] = ((decimal)(CSSALES05));
+            _row["CSSALES06"] = ((decimal)(CSSALES06));
+            _row["CSSALES07"] = ((decimal)(CSSALES07));
+            _row["CSSALES08"] = ((decimal)(CSSALES08));
+            _row["CSSALES09"] = ((decimal)(CSSALES09));
+            _row["CSSALES10"] = ((decimal)(CSSALES10));
+            _row["CSSALES11"] = ((decimal)(CSSALES11));
+            _row["CSSALES12"] = ((decimal)(CSSALES12));
         }
         private void PopulateFieldsCUSTDSPFCUSTREC(AdgDataSet _dataSet)
         {
