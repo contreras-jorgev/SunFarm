@@ -78,6 +78,7 @@ namespace SunFarm.CustomerApp
 
         // Customer DS
         DataStructure CUSTDS;
+        DataStructure CUSTSL;
 
         //       Open Feedback Area
         //       Input/Output Feedback Information
