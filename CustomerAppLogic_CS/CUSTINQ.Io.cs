@@ -63,6 +63,21 @@ namespace SunFarm.CustomerApp
         static ILayout CUSTDS_013 = Layout.FixedString(1);
         static ILayout CUSTDS_014 = Layout.FixedString(1);
         static ILayout CUSTDS_015 = Layout.FixedString(1);
+        static ILayout CUSTSL_000 = Layout.Packed(9, 0);
+        static ILayout CUSTSL_001 = Layout.Zoned(4, 0);
+        static ILayout CUSTSL_002 = Layout.Zoned(1, 0);
+        static ILayout CUSTSL_003 = Layout.Packed(11, 2);
+        static ILayout CUSTSL_004 = Layout.Packed(11, 2);
+        static ILayout CUSTSL_005 = Layout.Packed(11, 2);
+        static ILayout CUSTSL_006 = Layout.Packed(11, 2);
+        static ILayout CUSTSL_007 = Layout.Packed(11, 2);
+        static ILayout CUSTSL_008 = Layout.Packed(11, 2);
+        static ILayout CUSTSL_009 = Layout.Packed(11, 2);
+        static ILayout CUSTSL_010 = Layout.Packed(11, 2);
+        static ILayout CUSTSL_011 = Layout.Packed(11, 2);
+        static ILayout CUSTSL_012 = Layout.Packed(11, 2);
+        static ILayout CUSTSL_013 = Layout.Packed(11, 2);
+        static ILayout CUSTSL_014 = Layout.Packed(11, 2);
         private static Dictionary<string, string> CUSTOMERL2FormatIDs = new Dictionary<string, string>()
         {
             { "RCUSTOMER", "6su4S42+ard0ZHitdjHOFT1WPw0=" }
@@ -250,6 +265,171 @@ namespace SunFarm.CustomerApp
             set
             {
                 this.CUSTDS.SetString(((string)(value)).AsSpan(), 271, 1);
+            }
+        }
+        private FixedDecimal<_9, _0> CSCUSTNO
+        {
+            get
+            {
+                return this.CUSTSL.GetPacked(0, 9, 0);
+            }
+            set
+            {
+                this.CUSTSL.SetPacked(value, 0, 9, 0);
+            }
+        }
+        private FixedDecimal<_4, _0> CSYEAR
+        {
+            get
+            {
+                return this.CUSTSL.GetZoned(5, 4, 0);
+            }
+            set
+            {
+                this.CUSTSL.SetZoned(value, 5, 4, 0);
+            }
+        }
+        private FixedDecimal<_1, _0> CSTYPE
+        {
+            get
+            {
+                return this.CUSTSL.GetZoned(9, 1, 0);
+            }
+            set
+            {
+                this.CUSTSL.SetZoned(value, 9, 1, 0);
+            }
+        }
+        private FixedDecimal<_11, _2> CSSALES01
+        {
+            get
+            {
+                return this.CUSTSL.GetPacked(10, 11, 2);
+            }
+            set
+            {
+                this.CUSTSL.SetPacked(value, 10, 11, 2);
+            }
+        }
+        private FixedDecimal<_11, _2> CSSALES02
+        {
+            get
+            {
+                return this.CUSTSL.GetPacked(16, 11, 2);
+            }
+            set
+            {
+                this.CUSTSL.SetPacked(value, 16, 11, 2);
+            }
+        }
+        private FixedDecimal<_11, _2> CSSALES03
+        {
+            get
+            {
+                return this.CUSTSL.GetPacked(22, 11, 2);
+            }
+            set
+            {
+                this.CUSTSL.SetPacked(value, 22, 11, 2);
+            }
+        }
+        private FixedDecimal<_11, _2> CSSALES04
+        {
+            get
+            {
+                return this.CUSTSL.GetPacked(28, 11, 2);
+            }
+            set
+            {
+                this.CUSTSL.SetPacked(value, 28, 11, 2);
+            }
+        }
+        private FixedDecimal<_11, _2> CSSALES05
+        {
+            get
+            {
+                return this.CUSTSL.GetPacked(34, 11, 2);
+            }
+            set
+            {
+                this.CUSTSL.SetPacked(value, 34, 11, 2);
+            }
+        }
+        private FixedDecimal<_11, _2> CSSALES06
+        {
+            get
+            {
+                return this.CUSTSL.GetPacked(40, 11, 2);
+            }
+            set
+            {
+                this.CUSTSL.SetPacked(value, 40, 11, 2);
+            }
+        }
+        private FixedDecimal<_11, _2> CSSALES07
+        {
+            get
+            {
+                return this.CUSTSL.GetPacked(46, 11, 2);
+            }
+            set
+            {
+                this.CUSTSL.SetPacked(value, 46, 11, 2);
+            }
+        }
+        private FixedDecimal<_11, _2> CSSALES08
+        {
+            get
+            {
+                return this.CUSTSL.GetPacked(52, 11, 2);
+            }
+            set
+            {
+                this.CUSTSL.SetPacked(value, 52, 11, 2);
+            }
+        }
+        private FixedDecimal<_11, _2> CSSALES09
+        {
+            get
+            {
+                return this.CUSTSL.GetPacked(58, 11, 2);
+            }
+            set
+            {
+                this.CUSTSL.SetPacked(value, 58, 11, 2);
+            }
+        }
+        private FixedDecimal<_11, _2> CSSALES10
+        {
+            get
+            {
+                return this.CUSTSL.GetPacked(64, 11, 2);
+            }
+            set
+            {
+                this.CUSTSL.SetPacked(value, 64, 11, 2);
+            }
+        }
+        private FixedDecimal<_11, _2> CSSALES11
+        {
+            get
+            {
+                return this.CUSTSL.GetPacked(70, 11, 2);
+            }
+            set
+            {
+                this.CUSTSL.SetPacked(value, 70, 11, 2);
+            }
+        }
+        private FixedDecimal<_11, _2> CSSALES12
+        {
+            get
+            {
+                return this.CUSTSL.GetPacked(76, 11, 2);
+            }
+            set
+            {
+                this.CUSTSL.SetPacked(value, 76, 11, 2);
             }
         }
         private void PopulateBufferCUSTDSPFSFLC(AdgDataSet _dataSet)
@@ -591,6 +771,10 @@ namespace SunFarm.CustomerApp
         private DataStructure buildDSCUSTDS()
         {
             return new DataStructure(CUSTDS_000, CUSTDS_001, CUSTDS_002, CUSTDS_003, CUSTDS_004, CUSTDS_005, CUSTDS_006, CUSTDS_007, CUSTDS_008, CUSTDS_009, CUSTDS_010, CUSTDS_011, CUSTDS_012, CUSTDS_013, CUSTDS_014, CUSTDS_015);
+        }
+        private DataStructure buildDSCUSTSL()
+        {
+            return new DataStructure(CUSTSL_000, CUSTSL_001, CUSTSL_002, CUSTSL_003, CUSTSL_004, CUSTSL_005, CUSTSL_006, CUSTSL_007, CUSTSL_008, CUSTSL_009, CUSTSL_010, CUSTSL_011, CUSTSL_012, CUSTSL_013, CUSTSL_014);
         }
     }
 }
