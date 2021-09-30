@@ -96,8 +96,13 @@
                 </div>
 
                 <div Row="12">
-                    <DdsConstant Col="8" Text="Last registered sales" />
+                    <DdsConstant Col="8" class="large-bold-text" Text="Last registered sales" />
+                    <DdsCharField Col="27" class="large-bold-text" For="CUSTREC.YEAR_SALES" />
+                    <DdsDecField Col="63" class="large-bold-text left-aligned-field"
+                                 For="CUSTREC.TOTAL_SALES" EditCode=One />
+                    <DdsCharField Col="75" class="large-bold-text" For="CUSTREC.PERCENT_CHANGE_SALES" Color="green" />
                 </div>
+
                 <div Row="13">
                     <DdsConstant Col="12" Text="Jan" />
                     <DdsDecField Col="15" For="CUSTREC.CSSALES01" EditCode=One />
@@ -130,7 +135,11 @@
                 </div>
 
                 <div Row="17">
-                    <DdsConstant Col="8" Text="Last registered returns" />
+                    <DdsConstant Col="8" class="large-bold-text" Text="Last registered returns" />
+                    <DdsCharField Col="27" class="large-bold-text" For="CUSTREC.YEAR_RETURNS" />
+                    <DdsDecField Col="63" class="large-bold-text left-aligned-field"
+                                 For="CUSTREC.TOTAL_RETURNS" EditCode=One Color="red" />
+                    <DdsCharField Col="75" class="large-bold-text" For="CUSTREC.PERCENT_CHANGE_RETURNS" Color="red" />
                 </div>
 
                 <div Row="18">

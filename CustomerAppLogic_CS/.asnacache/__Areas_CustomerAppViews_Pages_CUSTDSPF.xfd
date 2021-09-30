@@ -49,7 +49,7 @@
                 <xs:attribute name="_x002A_ResponseIndicators" msprop:direction="2" type="xs:string" use="required" />
               </xs:complexType>
             </xs:element>
-            <xs:element name="CUSTREC" msprop:format="CUSTREC" msprop:fmtreclen="604" msprop:iFormat="2" msprop:erase="SFLC KEYS SALESREC" msprop:outreclen="604" msprop:responseinds="03 04 06 11 12 " msprop:inreclen="284">
+            <xs:element name="CUSTREC" msprop:format="CUSTREC" msprop:fmtreclen="710" msprop:iFormat="2" msprop:erase="SFLC KEYS SALESREC" msprop:outreclen="710" msprop:responseinds="03 04 06 11 12 " msprop:inreclen="284">
               <xs:complexType>
                 <xs:attribute name="CSRREC" msprop:dbcsType="0" msprop:direction="6" msprop:fieldType="Char" msprop:fmtoff="0" msprop:length="10" msprop:bytelen="10" msprop:dbcsByteLen="0" use="required">
                   <xs:simpleType>
@@ -182,6 +182,36 @@
                 <xs:attribute name="CSRETURN10" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="571" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
                 <xs:attribute name="CSRETURN11" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="582" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
                 <xs:attribute name="CSRETURN12" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="593" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="YEAR_SALES" msprop:dbcsType="0" msprop:direction="4" msprop:fieldType="Char" msprop:fmtoff="604" msprop:length="20" msprop:bytelen="20" msprop:dbcsByteLen="0" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:maxLength value="20" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="TOTAL_SALES" msprop:fieldType="Zoned" msprop:precision="13" msprop:scale="2" msprop:direction="4" msprop:fmtoff="624" msprop:bytelen="13" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="PERCENT_CHANGE_SALES" msprop:dbcsType="0" msprop:direction="4" msprop:fieldType="Char" msprop:fmtoff="637" msprop:length="20" msprop:bytelen="20" msprop:dbcsByteLen="0" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:maxLength value="20" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="YEAR_RETURNS" msprop:dbcsType="0" msprop:direction="4" msprop:fieldType="Char" msprop:fmtoff="657" msprop:length="20" msprop:bytelen="20" msprop:dbcsByteLen="0" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:maxLength value="20" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="TOTAL_RETURNS" msprop:fieldType="Zoned" msprop:precision="13" msprop:scale="2" msprop:direction="4" msprop:fmtoff="677" msprop:bytelen="13" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="PERCENT_CHANGE_RETURNS" msprop:dbcsType="0" msprop:direction="4" msprop:fieldType="Char" msprop:fmtoff="690" msprop:length="20" msprop:bytelen="20" msprop:dbcsByteLen="0" use="required">
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:maxLength value="20" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
                 <xs:attribute name="_x002A_Direction" msprop:direction="7" type="xs:string" use="required" />
                 <xs:attribute name="_x002A_Indicators" msprop:direction="4" type="xs:string" use="required" />
                 <xs:attribute name="_x002A_ResponseIndicators" msprop:direction="2" type="xs:string" use="required" />

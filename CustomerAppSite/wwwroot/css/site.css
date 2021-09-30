@@ -48,3 +48,8 @@
     border-style: solid;
     background-color: white;
 }
+
+.large-bold-text {
+    font-size: large !important;
+    font-weight: bold;
+}

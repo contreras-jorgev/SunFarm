@@ -209,6 +209,24 @@ namespace SunFarm.CustomerApp.CustomerAppViews
 
             [Dec(11, 2)]
             public decimal CSRETURN12 { get; private set; }
+
+            [Char(20)]
+            public string YEAR_SALES { get; private set; }
+
+            [Dec(13, 2)]
+            public decimal TOTAL_SALES { get; private set; }
+
+            [Char(20)]
+            public string PERCENT_CHANGE_SALES { get; private set; }
+
+            [Char(20)]
+            public string YEAR_RETURNS { get; private set; }
+
+            [Dec(13, 2)]
+            public decimal TOTAL_RETURNS { get; private set; }
+
+            [Char(20)]
+            public string PERCENT_CHANGE_RETURNS { get; private set; }
         }
 
         [
