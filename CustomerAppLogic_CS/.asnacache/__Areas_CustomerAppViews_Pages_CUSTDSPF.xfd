@@ -49,7 +49,7 @@
                 <xs:attribute name="_x002A_ResponseIndicators" msprop:direction="2" type="xs:string" use="required" />
               </xs:complexType>
             </xs:element>
-            <xs:element name="CUSTREC" msprop:format="CUSTREC" msprop:fmtreclen="472" msprop:iFormat="2" msprop:erase="SFLC KEYS SALESREC" msprop:outreclen="472" msprop:responseinds="03 04 06 11 12 " msprop:inreclen="284">
+            <xs:element name="CUSTREC" msprop:format="CUSTREC" msprop:fmtreclen="604" msprop:iFormat="2" msprop:erase="SFLC KEYS SALESREC" msprop:outreclen="604" msprop:responseinds="03 04 06 11 12 " msprop:inreclen="284">
               <xs:complexType>
                 <xs:attribute name="CSRREC" msprop:dbcsType="0" msprop:direction="6" msprop:fieldType="Char" msprop:fmtoff="0" msprop:length="10" msprop:bytelen="10" msprop:dbcsByteLen="0" use="required">
                   <xs:simpleType>
@@ -170,6 +170,18 @@
                 <xs:attribute name="CSSALES10" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="439" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
                 <xs:attribute name="CSSALES11" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="450" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
                 <xs:attribute name="CSSALES12" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="461" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="CSRETURN01" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="472" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="CSRETURN02" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="483" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="CSRETURN03" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="494" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="CSRETURN04" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="505" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="CSRETURN05" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="516" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="CSRETURN06" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="527" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="CSRETURN07" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="538" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="CSRETURN08" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="549" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="CSRETURN09" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="560" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="CSRETURN10" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="571" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="CSRETURN11" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="582" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
+                <xs:attribute name="CSRETURN12" msprop:fieldType="Zoned" msprop:precision="11" msprop:scale="2" msprop:direction="4" msprop:fmtoff="593" msprop:bytelen="11" msprop:dgtype="Zoned" type="xs:decimal" use="required" />
                 <xs:attribute name="_x002A_Direction" msprop:direction="7" type="xs:string" use="required" />
                 <xs:attribute name="_x002A_Indicators" msprop:direction="4" type="xs:string" use="required" />
                 <xs:attribute name="_x002A_ResponseIndicators" msprop:direction="2" type="xs:string" use="required" />
