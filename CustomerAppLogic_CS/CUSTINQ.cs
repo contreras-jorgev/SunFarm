@@ -8,7 +8,7 @@ using SunFarm.CustomerApp_Job;
 
 using System;
 using ASNA.QSys.Runtime.JobSupport;
-
+using System.Collections.Generic;
 
 namespace SunFarm.CustomerApp
 {
@@ -617,11 +617,65 @@ namespace SunFarm.CustomerApp
             CSSALES01 = CSSALES02 = CSSALES03 = CSSALES04 = CSSALES05 = CSSALES06 = 0;
             CSSALES07 = CSSALES08 = CSSALES09 = CSSALES10 = CSSALES11 = CSSALES12 = 0;
 
+            CSRETURN01 = CSRETURN02 = CSRETURN03 = CSRETURN04 = CSRETURN05 = CSRETURN06 = 0;
+            CSRETURN07 = CSRETURN08 = CSRETURN09 = CSRETURN10 = CSRETURN11 = CSRETURN12 = 0;
+
             FixedDecimal<_9, _0> CustomerNumber = new FixedDecimal<_9, _0>();
 
             CustomerNumber = CMCUSTNO.MoveRight(CustomerNumber);
-            if (CSMASTERL1.Seek(SeekMode.SetLL, CustomerNumber))
-                CSMASTERL1.ReadNextEqual(false, CustomerNumber);
+            if (!CSMASTERL1.Seek(SeekMode.SetLL, CustomerNumber))
+                return;
+
+            Dictionary<decimal, YearData> salesForCustomer = new Dictionary<decimal, YearData>();
+            Dictionary<decimal, YearData> returnsForCustomer = new Dictionary<decimal, YearData>();
+            decimal lastYearSales = decimal.MinValue;
+            decimal lastYearReturns = decimal.MinValue;
+
+            while( CSMASTERL1.ReadNextEqual(false, CustomerNumber))
+            {
+                if (CSTYPE == 1)
+                {
+                    lastYearSales = CSYEAR;
+                    salesForCustomer.Add(lastYearSales, new YearData(CSSALES01, CSSALES02, CSSALES03, CSSALES04, CSSALES05, CSSALES06, CSSALES07, CSSALES08, CSSALES09, CSSALES10, CSSALES11, CSSALES12));
+                }
+                else
+                {
+                    lastYearReturns = CSYEAR;
+                    returnsForCustomer.Add(lastYearSales, new YearData(CSSALES01, CSSALES02, CSSALES03, CSSALES04, CSSALES05, CSSALES06, CSSALES07, CSSALES08, CSSALES09, CSSALES10, CSSALES11, CSSALES12));
+                }
+            }
+
+            if (lastYearSales > decimal.MinValue)
+            {
+                CSSALES01 = salesForCustomer[lastYearSales].month[0];
+                CSSALES02 = salesForCustomer[lastYearSales].month[1];
+                CSSALES03 = salesForCustomer[lastYearSales].month[2];
+                CSSALES04 = salesForCustomer[lastYearSales].month[3];
+                CSSALES05 = salesForCustomer[lastYearSales].month[4];
+                CSSALES06 = salesForCustomer[lastYearSales].month[5];
+                CSSALES07 = salesForCustomer[lastYearSales].month[6];
+                CSSALES08 = salesForCustomer[lastYearSales].month[7];
+                CSSALES09 = salesForCustomer[lastYearSales].month[8];
+                CSSALES10 = salesForCustomer[lastYearSales].month[9];
+                CSSALES11 = salesForCustomer[lastYearSales].month[10];
+                CSSALES12 = salesForCustomer[lastYearSales].month[11];
+            }
+
+            if (lastYearReturns > decimal.MinValue)
+            {
+                CSRETURN01 = returnsForCustomer[lastYearReturns].month[0];
+                CSRETURN02 = returnsForCustomer[lastYearReturns].month[1];
+                CSRETURN03 = returnsForCustomer[lastYearReturns].month[2];
+                CSRETURN04 = returnsForCustomer[lastYearReturns].month[3];
+                CSRETURN05 = returnsForCustomer[lastYearReturns].month[4];
+                CSRETURN06 = returnsForCustomer[lastYearReturns].month[5];
+                CSRETURN07 = returnsForCustomer[lastYearReturns].month[6];
+                CSRETURN08 = returnsForCustomer[lastYearReturns].month[7];
+                CSRETURN09 = returnsForCustomer[lastYearReturns].month[8];
+                CSRETURN10 = returnsForCustomer[lastYearReturns].month[9];
+                CSRETURN11 = returnsForCustomer[lastYearReturns].month[10];
+                CSRETURN12 = returnsForCustomer[lastYearReturns].month[11];
+            }
         }
 
         //*********************************************************************
@@ -733,4 +787,39 @@ namespace SunFarm.CustomerApp
         }
     }
 
+    internal class YearData
+    {
+        const int MONTHS_IN_YEAR = 12;
+        public decimal[] month;
+
+        public YearData()
+        {
+            month = new decimal[MONTHS_IN_YEAR];
+        }
+
+        public YearData(decimal jan, decimal feb, decimal mar, decimal apr, decimal may, decimal jun, decimal jul, decimal aug, decimal sep, decimal oct, decimal nov, decimal dec) : this()
+        {
+            month[0] = jan;
+            month[1] = feb;
+            month[2] = mar;
+            month[3] = apr;
+            month[4] = may;
+            month[5] = jun;
+            month[6] = jul;
+            month[7] = aug;
+            month[8] = sep;
+            month[9] = oct;
+            month[10] = nov;
+            month[11] = dec;
+        }
+
+        public decimal Sum()
+        {
+            decimal result = 0;
+            foreach (var amt in month)
+                result += amt;
+
+            return result;
+        }
+    }
 }
