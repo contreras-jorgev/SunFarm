@@ -71,6 +71,10 @@ namespace SunFarm.CustomerApp
         {
             { "RCUSTOMER", "6su4S42+ard0ZHitdjHOFT1WPw0=" }
         };
+        private static Dictionary<string, string> CSMASTERL1FormatIDs = new Dictionary<string, string>()
+        {
+            { "RCSMASTL1", "MNWSCMjX4uCVz4ny/YR2N6c1XTM=" }
+        };
 
         private FixedDecimal<_9, _0> CMCUSTNO
         {
@@ -543,6 +547,46 @@ namespace SunFarm.CustomerApp
             CMYN01 = ((string)(_row["CMYN01"]));
             CMYN02 = ((string)(_row["CMYN02"]));
             CMYN03 = ((string)(_row["CMYN03"]));
+        }
+        private void PopulateBufferCSMASTERL1(string _, AdgDataSet _dataSet)
+        {
+            var _table = _dataSet.GetAdgTable("*FILE");
+            System.Data.DataRow _row = _table.Row;
+            _row["CSCUSTNO"] = ((decimal)(CSCUSTNO));
+            _row["CSYEAR"] = ((decimal)(CSYEAR));
+            _row["CSTYPE"] = ((decimal)(CSTYPE));
+            _row["CSSALES01"] = ((decimal)(CSSALES01));
+            _row["CSSALES02"] = ((decimal)(CSSALES02));
+            _row["CSSALES03"] = ((decimal)(CSSALES03));
+            _row["CSSALES04"] = ((decimal)(CSSALES04));
+            _row["CSSALES05"] = ((decimal)(CSSALES05));
+            _row["CSSALES06"] = ((decimal)(CSSALES06));
+            _row["CSSALES07"] = ((decimal)(CSSALES07));
+            _row["CSSALES08"] = ((decimal)(CSSALES08));
+            _row["CSSALES09"] = ((decimal)(CSSALES09));
+            _row["CSSALES10"] = ((decimal)(CSSALES10));
+            _row["CSSALES11"] = ((decimal)(CSSALES11));
+            _row["CSSALES12"] = ((decimal)(CSSALES12));
+        }
+        private void PopulateFieldsCSMASTERL1(string _, AdgDataSet _dataSet)
+        {
+            var _table = _dataSet.SetActive("*FILE");
+            System.Data.DataRow _row = _table.Row;
+            CSCUSTNO = ((decimal)(_row["CSCUSTNO"]));
+            CSYEAR = ((decimal)(_row["CSYEAR"]));
+            CSTYPE = ((decimal)(_row["CSTYPE"]));
+            CSSALES01 = ((decimal)(_row["CSSALES01"]));
+            CSSALES02 = ((decimal)(_row["CSSALES02"]));
+            CSSALES03 = ((decimal)(_row["CSSALES03"]));
+            CSSALES04 = ((decimal)(_row["CSSALES04"]));
+            CSSALES05 = ((decimal)(_row["CSSALES05"]));
+            CSSALES06 = ((decimal)(_row["CSSALES06"]));
+            CSSALES07 = ((decimal)(_row["CSSALES07"]));
+            CSSALES08 = ((decimal)(_row["CSSALES08"]));
+            CSSALES09 = ((decimal)(_row["CSSALES09"]));
+            CSSALES10 = ((decimal)(_row["CSSALES10"]));
+            CSSALES11 = ((decimal)(_row["CSSALES11"]));
+            CSSALES12 = ((decimal)(_row["CSSALES12"]));
         }
         private DataStructure buildDSCUSTDS()
         {
