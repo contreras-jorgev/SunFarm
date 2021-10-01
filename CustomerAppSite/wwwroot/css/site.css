@@ -49,6 +49,19 @@
     background-color: white;
 }
 
+#custrec-chart {
+    --custrec-chart-width: 300px;
+    --custrec-chart-height: 200px;
+    margin-top: calc(var(--custrec-chart-height) * -1 );
+    transform: translateY(var(--custrec-chart-height));
+    width: var(--custrec-chart-width);
+    height: var(--custrec-chart-height);
+    background-color: whitesmoke;
+    border-style: solid;
+    border-color: lightgrey;
+    border-width: medium;
+}
+
 .large-bold-text {
     font-size: large !important;
     font-weight: bold;
