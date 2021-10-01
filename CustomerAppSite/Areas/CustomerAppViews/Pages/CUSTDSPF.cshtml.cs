@@ -157,6 +157,7 @@ namespace SunFarm.CustomerApp.CustomerAppViews
             public string SFCONEMAL { get; set; }
 
             [Char(1)]
+            [Values(typeof(string), "Y", "N")]
             public string SFYN01 { get; set; }
 
             [Dec(11, 2)]
@@ -250,7 +251,11 @@ namespace SunFarm.CustomerApp.CustomerAppViews
             [Char(20)]
             public string PERCENT_CHANGE_RETURNS { get; private set; }
 
-            public string SALES_CHART_DATA { get { return FormatChartData(); } }
+            public string SALES_CHART_DATA { get {
+                    var data = FormatChartData();
+                    return data; 
+                } 
+            }
 
             private string FormatChartData()
             {
