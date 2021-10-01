@@ -53,3 +53,13 @@
     font-size: large !important;
     font-weight: bold;
 }
+
+.box-highlight-center-field {
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+.present-no-visible-field {
+    opacity: 0.1;
+}

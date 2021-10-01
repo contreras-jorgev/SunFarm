@@ -128,6 +128,27 @@ namespace SunFarm.CustomerApp.CustomerAppViews
             [Char(1)]
             public string SFSTATUS { get; set; }
 
+            public string SF_STATUS_NAME { get { return statusCodeToName(); } }
+
+            private string statusCodeToName()
+            {
+                switch (SFSTATUS)
+                {
+                    case "A":
+                        return "Active";
+                    case "C":
+                        return "Closed";
+                    case "O":
+                        return "Over Limit";
+                    case "R":
+                        return "Refer";
+                    case "S":
+                        return "Suspended";
+                }
+
+                return "(Undefined Status)";
+            }
+
             [Char(40)]
             public string SFCONTACT { get; set; }
 

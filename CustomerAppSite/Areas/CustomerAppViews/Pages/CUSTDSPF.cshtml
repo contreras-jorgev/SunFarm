@@ -49,6 +49,8 @@
                     <DdsConstant Col="8" Text="Account number" />
                     <DdsDecField class="left-aligned-field" Col="20" For="CUSTREC.SFCUSTNO" Color="DarkBlue" EditCode="Z" Comment="CUSTOMER NUMBER" />
                     @*<DdsCharField Col="35+5" For="CUSTREC.SFOLDNAME" Upper=true Color="DarkBlue" />*@
+                    <span class="box-highlight-center-field" Col="72" ColSpan="18">@Model.CUSTREC.SF_STATUS_NAME</span>
+                    <DdsCharField class="present-no-visible-field" Col="72" ColSpan="18" For="CUSTREC.SFSTATUS" Upper=true VirtualRowCol="15,27" PositionCursor="44" tabIndex=10 />
                 </div>
 
                 <div Row="3">
@@ -72,11 +74,6 @@
                     <DdsCharField Col="10+1+27" For="CUSTREC.SFSTATE" Upper=true VirtualRowCol="11,27" PositionCursor="43" tabIndex=6 />
                     <DdsCharField Col="10+1+2+2+27" For="CUSTREC.SFPOSTCODE" Upper=true VirtualRowCol="11,37" tabIndex=7 />
                 </div>
-                @*<div Row="8">
-            <DdsConstant Col="10" Text="Status" />
-            <DdsCharField Col="27" For="CUSTREC.SFSTATUS" Upper=true VirtualRowCol="15,27" PositionCursor="44" tabIndex=10 />
-            <DdsConstant Col="30+5" Text="(F4)" Color="Blue" />
-        </div>*@
                 <div Row="8">
                     <DdsConstant Col="10" Text="Contact Name" />
                     <DdsCharField Col="20" For="CUSTREC.SFCONTACT" Upper=true VirtualRowCol="16,27" tabIndex=11 />
