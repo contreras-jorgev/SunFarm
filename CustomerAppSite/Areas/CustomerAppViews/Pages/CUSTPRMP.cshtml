@@ -18,7 +18,13 @@
                 @{
                     int SFLC_SubfilePage = 8;
                 }
-                <DdsSubfileControl For="SFLC" KeyNames="ENTER 'Enter'; " SubfilePage="@SFLC_SubfilePage" ShowRecordNumber="(int)@Model.SFLC.SFLRRN" CueCurrentRecord=true ClickSetsCurrentRecord=true>
+                <DdsSubfileControl For="SFLC" KeyNames="ENTER 'Enter'; " SubfilePage="@SFLC_SubfilePage" 
+                                   ShowRecordNumber="(int)@Model.SFLC.SFLRRN" CueCurrentRecord=true ClickSetsCurrentRecord=true
+                                   DblClickKey="Enter"
+                                   DblClickTargetField="SFLSEL"
+                                   DblClickTargetValue="1"
+                                   >
+
                     <div Row="2">
                         <DdsConstant Col="2" Text="1=Select" Color="Blue" />
                     </div>
