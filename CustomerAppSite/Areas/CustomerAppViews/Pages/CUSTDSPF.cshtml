@@ -51,6 +51,7 @@
                     @*<DdsCharField Col="35+5" For="CUSTREC.SFOLDNAME" Upper=true Color="DarkBlue" />*@
                     <span class="box-highlight-center-field" Col="72" ColSpan="18">@Model.CUSTREC.SF_STATUS_NAME</span>
                     <DdsCharField class="present-no-visible-field" Col="72" ColSpan="18" For="CUSTREC.SFSTATUS" Upper=true VirtualRowCol="15,27" PositionCursor="44" tabIndex=10 />
+                    <DdsButton Col="91" IconId="search" ButtonStyle="Icon" AidKey="F4" FocusField="CUSTREC.SFSTATUS" />
                 </div>
 
                 <div Row="3">
@@ -72,8 +73,9 @@
                 <div Row="7">
                     <DdsConstant Col="20" Text="City" />
                     <DdsCharField Col="27" ColSpan="10" LimitMaxLength=true For="CUSTREC.SFCITY" VirtualRowCol="10,27" PositionCursor="42" tabIndex=5 />
-                    <DdsCharField Col="10+1+27" For="CUSTREC.SFSTATE" Upper=true VirtualRowCol="11,27" PositionCursor="43" tabIndex=6 />
-                    <DdsCharField Col="10+1+2+2+27" For="CUSTREC.SFPOSTCODE" Upper=true VirtualRowCol="11,37" tabIndex=7 />
+                    <DdsCharField Col="10+27" For="CUSTREC.SFSTATE" Upper=true VirtualRowCol="11,27" PositionCursor="43" tabIndex=6 />
+                    <DdsButton Col="40" IconId="search" ButtonStyle="Icon" AidKey="F4" FocusField="CUSTREC.SFSTATE" />
+                    <DdsCharField Col="15+27" For="CUSTREC.SFPOSTCODE" Upper=true VirtualRowCol="11,37" tabIndex=7 />
                 </div>
                 <div Row="8">
                     <DdsConstant Col="10" Text="Contact Name" />
