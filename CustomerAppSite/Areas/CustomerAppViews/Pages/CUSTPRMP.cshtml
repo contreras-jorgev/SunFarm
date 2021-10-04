@@ -15,7 +15,7 @@
 
         <main role="main" class="display-element-uninitialized">
             <DdsRecord For="MYWINDOW" KeyNames="ENTER 'Enter'; F12 'Cancel';" 
-                       WindowLeftCol=30 WindowTopRow=9 
+                       WindowLeftCol=33 WindowTopRow=5 
                        WindowWidthCols=27 WindowHeightRows=8 
                        WindowTitle=@Model.MYWINDOW.WINTITLE ReturnData="True"> 
                 @{
@@ -27,15 +27,15 @@
                                    DblClickTargetField="SFLSEL"
                                    DblClickTargetValue="1"
                                    StretchConstantText=false>
-                    <div Row="2">
+                    <div Row="1">
                         <DdsConstant Col="5" Text="Value" Color="DarkBlue" />
                         <DdsConstant Col="12" Text="Description" Color="DarkBlue" />
-                        <DdsButton Col="25" IconId="remove" ButtonStyle="Icon" AidKey="F12" />
+                        <DdsButton Col="26" IconId="remove" IconTitle="Back" ButtonStyle="Icon" AidKey="F12" />
                     </div>
-                    <div Row="3" RowSpan="@SFLC_SubfilePage">
+                    <div Row="2" RowSpan="@SFLC_SubfilePage">
                         @for (int rrn = 0; rrn < Model.SFLC.SFL1.Count; rrn++)
                         {
-                            int row = 3 + rrn;
+                            int row = 2 + rrn;
                             <DdsSubfileRecord RecordNumber="rrn" For="SFLC.SFL1">
                                 <DdsDecField Col="3" ColSpan="1" class="present-no-visible-field" For="SFLC.SFL1[rrn].SFLSEL" VirtualRowCol="@row,3" EditCode="Z" tabIndex=1 />
                                 <DdsCharField Col="6" For="SFLC.SFL1[rrn].SFLVALUE" Upper=true />
