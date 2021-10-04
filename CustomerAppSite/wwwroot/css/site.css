@@ -76,3 +76,11 @@
 .present-no-visible-field {
     opacity: 0.1;
 }
+
+.non-visible-field {
+    display: none;
+}
+
+#customer-prompt-go-back-icon {
+    transform: translateY(-25px) scale(75%);
+}
