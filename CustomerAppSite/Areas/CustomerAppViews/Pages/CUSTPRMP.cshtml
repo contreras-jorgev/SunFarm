@@ -27,10 +27,13 @@
                                    DblClickTargetField="SFLSEL"
                                    DblClickTargetValue="1"
                                    StretchConstantText=false>
+                    <div Row="1">
+                        <DdsConstant Col="1" Text=" " /> <!-- Workaround Case 21065 -->
+                        <DdsButton id="customer-prompt-go-back-icon" Col="27" IconId="remove" IconTitle="Back" ButtonStyle="Icon" AidKey="F12" />
+                    </div>
                     <div Row="2">
                         <DdsConstant Col="5" Text="Value" Color="DarkBlue" />
                         <DdsConstant Col="12" Text="Description" Color="DarkBlue" />
-                        <DdsButton id="customer-prompt-go-back-icon" Col="27" IconId="remove" IconTitle="Back" ButtonStyle="Icon" AidKey="F12" />
                     </div>
                     <div Row="3" RowSpan="@SFLC_SubfilePage">
                         @for (int rrn = 0; rrn < Model.SFLC.SFL1.Count; rrn++)
